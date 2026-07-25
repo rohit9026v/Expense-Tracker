@@ -6,7 +6,7 @@ A modern Expense Tracker web application built using **HTML, CSS, and JavaScript
 
 ## 🚀 Live Demo
 
-🔗 https://your-vercel-link.vercel.app
+🔗 https://expense-tracker-delta-sooty-76.vercel.app
 
 ---
 
