@@ -9,8 +9,6 @@ html{
 }
 
 body{
-    min-height: 100%;
-    width: 100%;
     overflow-x: hidden;
     background-color: rgb(248, 246, 246);
     font-family: Arial, Helvetica, sans-serif;
@@ -21,20 +19,16 @@ body{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    flex-wrap: nowrap;
     height: 5rem;
-    margin-top: 2rem;
     border: 1px solid gray;
     background-color: white;
-    outline: none;
     border-radius: 8px;
     margin: 2rem 5vw;
-    padding: 0% 5vw ;
+    padding: 0 2rem;
 }
 
 .head{
     display: flex;
-    flex-wrap: nowrap;
     font-family: cursive;
     font-size: 1.5rem;    
 }
@@ -80,11 +74,9 @@ h3{
 
 .input{
     height: 3.5rem;
-    width: 100%;
-    max-width: 35rem;
+    width: 35rem;
     border-radius: 5px;
     border: 0.5px solid gray ;
-    outline: none;
 }
 
 .inp-category{
@@ -92,7 +84,6 @@ h3{
     width: 30rem;
     border-radius: 5px;
     border: 0.5px solid gray ;
-    outline: none;
     cursor: pointer;
 }
 
@@ -102,20 +93,17 @@ h3{
     background-color: rgb(1, 168, 87);
     border-radius: 5px; 
     cursor: pointer;
-    outline: none;
     border: none;
+    transition: 300ms ease-in-out;
 }
 
+
 .add-btn:hover{
-    transition: ease-in-out;
-    transition-duration: 300ms;
     box-shadow: 0 0 15px 2px rgb(39, 244, 2);
 }
 
 .add-btn:active{
-    transition: ease-in-out;
     scale: 95%;
-    transition-duration: 300ms;
 }
 
 
@@ -124,7 +112,6 @@ h3{
     width: 100%;
     border-radius: 8px;
     display: flex;
-    flex-wrap: nowrap;
     justify-content: space-between;
 }
 
@@ -160,11 +147,11 @@ h3{
 .category-wrapper{
     height: 5rem;
     border: 1px solid gray;
-    outline: none;
     border-radius: 8px;
     display: flex;
     align-items: center;
-    padding-left: 2rem;
+    padding: 0 2rem;
+    gap: 2rem;
 }
 
 .fil{
@@ -176,9 +163,9 @@ h3{
     height: 3rem;
     width: 25rem;
     border-radius: 5px;
-    outline: none;
     border: 1px solid gray;
-    cursor: pointer;    
+    cursor: pointer;  
+      
 }
 
 .expheads{
@@ -199,23 +186,19 @@ h3{
     border-radius: 8px;
     border: 1px solid gray;
     background-color: white;
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding: 0 2rem;
 }
 
 .category{
     font-size: 2rem;
     user-select: none;
     display: flex;
-    flex-wrap: nowrap;
     justify-content: space-around;
     align-items: center;
     width: 15rem;
 }
 
-.fil{
-    user-select: none;
-}
+
 
 .category-icon{
     height: 5rem;
@@ -223,7 +206,6 @@ h3{
 
 .category-amount{
     display: flex;
-    flex-wrap: nowrap;
     align-items: center;
     justify-content: space-between;
     height: 5rem;
@@ -249,7 +231,7 @@ h3{
 
 .footer{
     height: 4rem;
-    margin-bottom:rem;
+    margin: 1rem 0;
     font-size: 2.5rem;
     align-self: center;
     display: flex;
@@ -267,7 +249,6 @@ h3{
 .delete-btn{
     cursor: pointer;
     height: 4rem;
-    outline: none;
     width: 4rem;
     border: none;
     background-color: white;
