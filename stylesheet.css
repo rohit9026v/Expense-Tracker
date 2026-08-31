@@ -8,11 +8,36 @@ html{
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: "Inter";
+    src: url("./assets/fonts/InterDisplay-Regular.woff2") format("woff2");
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("./assets/fonts/InterDisplay-Medium.woff2") format("woff2");
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("./assets/fonts/InterDisplay-SemiBold.woff2") format("woff2");
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: "Inter";
+    src: url("./assets/fonts/Inter-Bold.woff2") format("woff2");
+    font-weight: 700;
+}
+
 body{
     overflow-x: hidden;
     background-color: rgb(248, 246, 246);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Inter", sans-serif;
     caret-color: transparent;
+    background: #FAF8F3;
 
 }
 
@@ -22,32 +47,65 @@ body{
     justify-content: space-between;
     height: auto;
     border: 1px solid gray;
-    background-color: white;
+    background-color:  #F1E6D6;
     border-radius: 8px;
     margin: 2rem 5vw;
     padding: 0 2rem;
 }
 
-.head{
+.head-sec{
     display: flex;
-    font-family: cursive;
-    font-size: 1.5rem;    
+    align-items: center;
+    gap: 1rem;
 }
 
+h1{
+    font-size: 2.5rem;
+    font-weight: 600;
+}
+
+
 .wallet-incon{
-    margin-right: 1rem;
-    width: 3rem;
+    width: 4rem;
+}
+
+.profile-sec{
+    display: flex;
+    gap: 2rem;
+    align-items: center;
 }
 
 .date-time{
     font-size: 1.5rem;
 }
 
-.dark{
-    height: 4rem;
-    width: 4rem;
+.dark,
+.profile{
+    height: 5rem;
+    width: 5rem;
     border-radius: 50%;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    background-color: transparent;
 }
+
+.dark img,
+.profile img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.dark img{
+    width: 80%;
+}
+
+.dark:active,
+.profile:active{
+    scale: 95%;
+}
+
 
 .profile{
     height: 4rem;
@@ -78,6 +136,7 @@ h2{
     justify-content: space-evenly;
     padding: 1rem 2rem;
     gap: 1rem;
+    background-color: #F1E6D6;
 }
 
 .user-inputs{
@@ -93,6 +152,7 @@ h2{
     border-radius: 5px;
     border: 0.5px solid gray ;
     padding: 0 2rem;
+    caret-color: black;
 }
 
 
@@ -117,6 +177,8 @@ h2{
 .add-btn{
     height: 3.5rem;
     width: 15rem;
+    /* color: white;
+    font: bold; */
     background-color: rgb(1, 168, 87);
     border-radius: 5px; 
     cursor: pointer;
@@ -154,6 +216,7 @@ h2{
     place-items: center;
     padding: 1rem;
     font-size: 3rem;
+    font-weight: 500;
 }
 
 .texpense{
@@ -173,7 +236,7 @@ h2{
     color: purple;
 }
 
-.category-wrapper{
+.filter-wrapper{
     height: 5rem;
     border: 1px solid gray;
     border-radius: 8px;
@@ -181,6 +244,7 @@ h2{
     align-items: center;
     padding: 2rem 2rem;
     gap: 2rem;
+    background-color:  #EDE7DC;
 }
 
 .fil{
@@ -223,15 +287,14 @@ h2{
     font-size: 2rem;
     user-select: none;
     display: flex;
-    justify-content: space-around;
     align-items: center;
-    width: 15rem;
+    gap: 1.5rem;
 }
 
 
 
 .category-icon{
-    height: 5rem;
+    height: 6rem;
 }
 
 .category-amount{
@@ -261,28 +324,35 @@ h2{
 }
 
 .footer{
-    height: 4rem;
     margin: 1rem 0;
     font-size: 2.5rem;
-    align-self: center;
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    
 }
 
 .ft-img{
-    height: 1.5rem;
+    height: 4rem;
 }
 
 .delete-img{
-    width: 4rem;
+    width: 4.5rem;
 }
 
 .delete-btn{
     cursor: pointer;
-    height: 4rem;
-    width: 4rem;
+    height: 4.5rem;
+    width: 4.5rem;
     border: none;
-    background-color: white;
+    background-color: transparent;
+    transition: ease-in-out 50ms;
+    object-fit: contain;
+}
+
+.delete-btn:active{
+    scale: 95%;
 }
 
 .hidden{

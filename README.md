@@ -49,12 +49,6 @@ Expense-Tracker/
 
 ---
 
-## 📸 Screenshots
-
-(Add project screenshots here)
-
----
-
 ## 📚 What I Learned
 
 During this project I practiced:
@@ -78,7 +72,6 @@ During this project I practiced:
 - 👤 User Profiles
 - 📅 Monthly & Yearly Reports
 - 📥 Export Expenses (PDF / Excel)
-- ☁️ Cloud Database Integration
 - 🔍 Search & Filter Expenses
 - 📈 Budget Planning
 
@@ -94,4 +87,4 @@ This project was built to improve my JavaScript skills by implementing real-worl
 
 **Rohit Verma**
 
-GitHub: https://github.com/rohit9026vc
+GitHub: https://github.com/rohit9026v
