@@ -1,256 +1,339 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Expense Tracker</title>
-    <link rel="stylesheet" href="stylesheet.css">
-</head>
-<body>
+    <link rel="stylesheet" href="stylesheet.css" />
+  </head>
+  <body>
     <header>
+      <!-- NavBar -->
 
-                                   <!-- NavBar -->
-
-        <div class="header-wrapper">
-
-            <div class="head-sec">
-                <div class="logo">
-                    <img src="./assets/logo.png" alt=" wallet-icon" class="wallet-incon">
-                </div>
-                <h1>Expense Tracker</h1>
-            </div>
-
-            <div class="profile-sec">
-                <div class="date-time">
-                    <p id="pdate-time">--</p>
-                </div>
-                <div>
-                    <button class="dark" type="button"aria-label="Toggle dark mode">
-                        <img src="./assets/dark.png" alt="Dark Mode Icon">
-                    </button>
-                </div>
-                <div>
-                    <button type="button" class="profile" aria-label="Open profile">
-                        <img src="./assets/profile.png" alt="Profile Icon">
-                    </button>
-                </div>  
-            </div>
-             
+      <div class="header-wrapper">
+        <div class="head-sec">
+          <div class="logo">
+            <img
+              src="./assets/logo.png"
+              alt=" wallet-icon"
+              class="wallet-incon"
+            />
+          </div>
+          <h1>Expense Tracker</h1>
         </div>
 
+        <div class="date-time">
+          <p id="pdate-time">--</p>
+        </div>
+
+        <div class="profile-sec">
+          <div>
+            <button class="dark" type="button" aria-label="Toggle dark mode">
+              <img src="./assets/dark.png" alt="Dark Mode Icon" />
+            </button>
+          </div>
+          <div>
+            <button type="button" class="profile" aria-label="Open profile">
+              <img src="./assets/profile.png" alt="Profile Icon" />
+            </button>
+          </div>
+        </div>
+      </div>
     </header>
 
     <main>
-
-            <div class="body-wrapper">
-
-                <section class="add-expense">
-                    <div class="head2">
-                        <h2>Add New Expense</h2>
-                    </div>
-                    <form>
-                        
-                        <div class="user-inputs">
-                            <label for="inp-title"></label>
-                            <input type="text" name="title" id="inp-title" class="input" placeholder="Enter title(e.g. food)" required>
-                            <label for="inp-amount"></label>
-                            <input type="number" name="amount" id="inp-amount" class="input" placeholder="Amount (₹)" min="1" required>
-                            <select name="category" id="inp-category" class="inp-category">
-                                <option value="food">Food</option>
-                                <option value="travel">Travel</option>
-                                <option value="clothing">Clothing</option>
-                                <option value="hobbies">Hobbies</option>
-                                <option value="medical">Medical</option>
-                                <option value="studies">Studies</option>
-                                <option value="family">Family</option>
-                                <option value="misc-expense">Misc. Expense</option>
-                            </select>
-                            <button type="submit" id="add-btn" class="add-btn">Add Expense</button>
-                        </div>
-                    </form>
-                </section>
-
-                <div class="dis-expense-wrapper">
-                    <div class="dis-expense">
-                        <p class="texpense">Total Expense</p>
-                        <p class="tamount">0</p>
-                    </div>
-                    <div class="dis-expense">
-                        <p class="texpense">Total Entries</p>
-                        <p class="tentries">0</p>
-                    </div>
-                    <div class="dis-expense">
-                        <p class="texpense">This Month</p>
-                        <p class="tmonth">0</p>
-                    </div>
-                </div>
-
-                <section class="filter-wrapper">
-                    <label for="fil-category" class="fil">Filter by category:</label>
-                     <select name="fil-category" id="fil-category" class="fil-category">
-                        <option value="all-category">All Category</option>
-                        <option value="food">Food</option>
-                        <option value="travel">Travel</option>
-                        <option value="clothing">Clothing</option>
-                        <option value="hobbies">Hobbies</option>
-                        <option value="medical">Medical</option>
-                        <option value="studies">Studies</option>
-                        <option value="family">Family</option>
-                        <option value="misc-expense">Misc. Expense</option>
-                    </select>                   
-                </section>
-
-                
-                <h2 class="expheads">Your Expense</h2>
-                
-
-                <div class="dis-wrapper">
-
-                    <div class="exp-dis food">
-                        <div class="category">
-                            <img src="./assets/food.png" alt="category-icon" class="category-icon" >
-                            <p>Food</p>
-                        </div>
-                        <div class="category-amount">
-                            <div class="exp-dt">
-                                <p class="exp amount" id="food"></p>
-                                <span class="d-t" id="fdt"></span>
-                            </div>
-                            <div class="delete">
-                                <button type="button" id="dlt-button" class="delete-btn"><img src="./assets/delete.png" alt="delete-btn" class="delete-img" ></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="exp-dis travel">
-                        <div class="category">
-                            <img src="./assets/travel.png" alt="category-icon" class="category-icon">
-                            <p>Travel</p>
-                        </div>
-                        <div class="category-amount">
-                            <div class="exp-dt">
-                                <p class="exp amount" id="travel"></p>
-                                <span class="d-t" id="tdt"></span>
-                            </div>
-                            <div class="delete">
-                                <button type="button" id="dlt-button" class="delete-btn"><img src="./assets/delete.png" alt="delete-btn" class="delete-img" ></button>    
-                            </div>  
-                        </div>
-                    </div>
-
-                    <div class="exp-dis clothing">
-                        <div class="category">
-                            <img src="./assets/clothes.png" alt="category-icon" class="category-icon">
-                            <p>Clothing</p>
-                        </div>
-                        <div class="category-amount">
-                            <div class="exp-dt">
-                                <p class="exp amount" id="clothing"></p>
-                                <span class="d-t" id="cdt"></span>
-                            </div>
-                            <div class="delete">
-                                <button type="button" id="dlt-button" class="delete-btn"><img src="./assets/delete.png" alt="delete-btn" class="delete-img" ></button>
-                            </div> 
-                        </div> 
-                    </div>
-
-                    <div class="exp-dis hobbies">
-                        <div class="category ">
-                            <img src="./assets/hobbies.png" alt="category-icon" class="category-icon">
-                            <p>Hobbies</p>
-                        </div>
-                        <div class="category-amount">
-                            <div class="exp-dt">
-                                <p class="exp amount" id="hobbies"></p>
-                                <span class="d-t" id="hdt"></span>
-                            </div>
-                            <div class="delete">
-                                <button type="button" id="dlt-button" class="delete-btn"><img src="./assets/delete.png" alt="delete-btn" class="delete-img" ></button>
-                            </div>  
-                        </div>
-                    </div>
-
-                    <div class="exp-dis medical">
-                        <div class="category">
-                            <img src="./assets/medical.png" alt="category-icon" class="category-icon">
-                            <p>Medical</p>
-                        </div>
-                        <div class="category-amount">
-                            <div class="exp-dt">
-                                <p class="exp amount" id="medical"></p>
-                                <span class="d-t" id="mdt"></span>
-                            </div>
-                            <div class="delete">
-                                <button type="button" id="dlt-button" class="delete-btn"><img src="./assets/delete.png" alt="delete-btn" class="delete-img" ></button>
-                            </div>  
-                        </div>
-                    </div>
-
-                    <div class="exp-dis studies">
-                        <div class="category">
-                            <img src="./assets/studies.png" alt="category-icon" class="category-icon">
-                            <p>Studies</p>
-                        </div>
-                        <div class="category-amount">
-                            <div class="exp-dt">
-                                <p class="exp amount" id="studies"></p>
-                                <span class="d-t" id="sdt"></span>
-                            </div>
-                            <div class="delete">
-                                <button type="button" id="dlt-button" class="delete-btn"><img src="./assets/delete.png" alt="delete-btn" class="delete-img" ></button>    
-                            </div> 
-                        </div> 
-                    </div>
-
-                    <div class="exp-dis family">
-                        <div class="category">
-                        <img src="./assets/family.png" alt="category-icon" class="category-icon">
-                        <p>Family</p>
-                        </div>
-                        <div class="category-amount">
-                            <div class="exp-dt">
-                                <p class="exp amount" id="family"></p>
-                                <span class="d-t" id="fdt"></span>
-                            </div>
-                            <div class="delete">
-                                <button type="button" id="dlt-button" class="delete-btn"><img src="./assets/delete.png" alt="delete-btn" class="delete-img" ></button>
-                            </div>  
-                        </div>
-                    </div>
-
-                    <div class="exp-dis misc-expense">
-                        <div class="category">
-                            <img src="./assets/misc.png" alt="category-icon" class="category-icon">
-                            <p>Misc. Expense</p>
-                        </div>
-                        <div class="category-amount">
-                            <div class="exp-dt">
-                            <p class="exp amount" id="misc-expense"></p>
-                            <span class="d-t" id="midt"></span>
-                            </div>
-                            <div class="delete">
-                                <button type="button" id="dlt-button" class="delete-btn"><img src="./assets/delete.png" alt="delete-btn" class="delete-img"></button>
-                            </div>
-                        </div>  
-                    </div>
-
-                </div>
+      <div class="body-wrapper">
+        <section class="add-expense">
+          <div class="head2">
+            <h2>Add New Expense</h2>
+          </div>
+          <form>
+            <div class="user-inputs">
+              <label for="inp-title"></label>
+              <input
+                type="text"
+                name="title"
+                id="inp-title"
+                class="input"
+                placeholder="Enter title(e.g. food)"
+              />
+              <label for="inp-amount"></label>
+              <input
+                type="number"
+                name="amount"
+                id="inp-amount"
+                class="input"
+                placeholder="Amount (₹)"
+                min="1"
+              />
+              <select name="category" id="inp-category" class="inp-category">
+                <option value="food">Food</option>
+                <option value="travel">Travel</option>
+                <option value="clothing">Clothing</option>
+                <option value="hobbies">Hobbies</option>
+                <option value="medical">Medical</option>
+                <option value="studies">Studies</option>
+                <option value="family">Family</option>
+                <option value="misc-expense">Misc. Expense</option>
+              </select>
+              <button type="submit" id="add-btn" class="add-btn">
+                Add Expense
+              </button>
             </div>
+          </form>
+        </section>
+
+        <div class="dis-expense-wrapper">
+          <div class="dis-expense">
+            <p class="texpense">Total Expense</p>
+            <p class="tamount">0</p>
+          </div>
+          <div class="dis-expense">
+            <p class="texpense">Total Entries</p>
+            <p class="tentries">0</p>
+          </div>
+          <div class="dis-expense">
+            <p class="texpense">This Month</p>
+            <p class="tmonth">0</p>
+          </div>
+        </div>
+
+        <section class="filter-wrapper">
+          <label for="fil-category" class="fil">Filter by category:</label>
+          <select name="fil-category" id="fil-category" class="fil-category">
+            <option value="all-category">All Category</option>
+            <option value="food">Food</option>
+            <option value="travel">Travel</option>
+            <option value="clothing">Clothing</option>
+            <option value="hobbies">Hobbies</option>
+            <option value="medical">Medical</option>
+            <option value="studies">Studies</option>
+            <option value="family">Family</option>
+            <option value="misc-expense">Misc. Expense</option>
+          </select>
+        </section>
+
+        <h2 class="expheads">Your Expenses</h2>
+
+        <div class="dis-wrapper">
+          <div class="exp-dis food">
+            <div class="category">
+              <img
+                src="./assets/food.png"
+                alt="category-icon"
+                class="category-icon"
+              />
+              <p>Food</p>
+            </div>
+            <div class="category-amount">
+              <div class="exp-dt">
+                <p class="exp amount" id="food"></p>
+                <span class="d-t" id="fdt"></span>
+              </div>
+              <div class="delete">
+                <button type="button" id="dlt-button" class="delete-btn">
+                  <img
+                    src="./assets/delete.png"
+                    alt="delete-btn"
+                    class="delete-img"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-dis travel">
+            <div class="category">
+              <img
+                src="./assets/travel.png"
+                alt="category-icon"
+                class="category-icon"
+              />
+              <p>Travel</p>
+            </div>
+            <div class="category-amount">
+              <div class="exp-dt">
+                <p class="exp amount" id="travel"></p>
+                <span class="d-t" id="tdt"></span>
+              </div>
+              <div class="delete">
+                <button type="button" id="dlt-button" class="delete-btn">
+                  <img
+                    src="./assets/delete.png"
+                    alt="delete-btn"
+                    class="delete-img"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-dis clothing">
+            <div class="category">
+              <img
+                src="./assets/clothes.png"
+                alt="category-icon"
+                class="category-icon"
+              />
+              <p>Clothing</p>
+            </div>
+            <div class="category-amount">
+              <div class="exp-dt">
+                <p class="exp amount" id="clothing"></p>
+                <span class="d-t" id="cdt"></span>
+              </div>
+              <div class="delete">
+                <button type="button" id="dlt-button" class="delete-btn">
+                  <img
+                    src="./assets/delete.png"
+                    alt="delete-btn"
+                    class="delete-img"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-dis hobbies">
+            <div class="category">
+              <img
+                src="./assets/hobbies.png"
+                alt="category-icon"
+                class="category-icon"
+              />
+              <p>Hobbies</p>
+            </div>
+            <div class="category-amount">
+              <div class="exp-dt">
+                <p class="exp amount" id="hobbies"></p>
+                <span class="d-t" id="hdt"></span>
+              </div>
+              <div class="delete">
+                <button type="button" id="dlt-button" class="delete-btn">
+                  <img
+                    src="./assets/delete.png"
+                    alt="delete-btn"
+                    class="delete-img"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-dis medical">
+            <div class="category">
+              <img
+                src="./assets/medical.png"
+                alt="category-icon"
+                class="category-icon"
+              />
+              <p>Medical</p>
+            </div>
+            <div class="category-amount">
+              <div class="exp-dt">
+                <p class="exp amount" id="medical"></p>
+                <span class="d-t" id="mdt"></span>
+              </div>
+              <div class="delete">
+                <button type="button" id="dlt-button" class="delete-btn">
+                  <img
+                    src="./assets/delete.png"
+                    alt="delete-btn"
+                    class="delete-img"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-dis studies">
+            <div class="category">
+              <img
+                src="./assets/studies.png"
+                alt="category-icon"
+                class="category-icon"
+              />
+              <p>Studies</p>
+            </div>
+            <div class="category-amount">
+              <div class="exp-dt">
+                <p class="exp amount" id="studies"></p>
+                <span class="d-t" id="sdt"></span>
+              </div>
+              <div class="delete">
+                <button type="button" id="dlt-button" class="delete-btn">
+                  <img
+                    src="./assets/delete.png"
+                    alt="delete-btn"
+                    class="delete-img"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-dis family">
+            <div class="category">
+              <img
+                src="./assets/family.png"
+                alt="category-icon"
+                class="category-icon"
+              />
+              <p>Family</p>
+            </div>
+            <div class="category-amount">
+              <div class="exp-dt">
+                <p class="exp amount" id="family"></p>
+                <span class="d-t" id="fdt"></span>
+              </div>
+              <div class="delete">
+                <button type="button" id="dlt-button" class="delete-btn">
+                  <img
+                    src="./assets/delete.png"
+                    alt="delete-btn"
+                    class="delete-img"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="exp-dis misc-expense">
+            <div class="category">
+              <img
+                src="./assets/misc.png"
+                alt="category-icon"
+                class="category-icon"
+              />
+              <p>Misc. Expense</p>
+            </div>
+            <div class="category-amount">
+              <div class="exp-dt">
+                <p class="exp amount" id="misc-expense"></p>
+                <span class="d-t" id="midt"></span>
+              </div>
+              <div class="delete">
+                <button type="button" id="dlt-button" class="delete-btn">
+                  <img
+                    src="./assets/delete.png"
+                    alt="delete-btn"
+                    class="delete-img"
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
 
     <footer>
-
-        <div class="footer">
-            <p>
-                Made with 
-            </p>    
-                <img src="./assets/heart.png" alt="" class="ft-img">
-            <p>    
-                using Javascript
-            </p>
-        </div>
-
+      <div class="footer">
+        <p>Made with</p>
+        <img src="./assets/heart.png" alt="" class="ft-img" />
+        <p>using Javascript</p>
+      </div>
     </footer>
-<script src="code.js"></script>
-</body>
+    <script src="code.js"></script>
+  </body>
 </html>
