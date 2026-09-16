@@ -19,7 +19,7 @@
               class="wallet-incon"
             />
           </div>
-          <h1>Expense Tracker</h1>
+          <h1>Pennywise</h1>
         </div>
 
         <div class="date-time">
@@ -28,8 +28,13 @@
 
         <div class="profile-sec">
           <div>
-            <button class="dark" type="button" aria-label="Toggle dark mode">
-              <img src="./assets/dark.png" alt="Dark Mode Icon" />
+            <button
+              class="dark"
+              type="button"
+              id="dark-btn"
+              aria-label="Toggle dark mode"
+            >
+              <img src="./assets/dark.png" />
             </button>
           </div>
           <div>
@@ -43,7 +48,35 @@
 
     <main>
       <div class="body-wrapper">
-        <section class="add-expense">
+        <div class="tools">
+          <div>
+            <h2>Hello there!👋</h2>
+            <p>Let’s make every penny count.</p>
+          </div>
+          <div class="file">
+            <button type="button" class="exportBtn" id="printbtn">
+              <img src="./assets/print.png" alt="print" />
+            </button>
+            <div class="uploadwrapper">
+              <label for="uploadimg" class="uploadlbl">
+                <img
+                  src="./assets/upload.png"
+                  alt="upload-icon"
+                  class="uploadimg"
+                />
+                <p>Upload Receipt</p>
+                <input
+                  type="file"
+                  accept="image/*"
+                  class="upload"
+                  id="uploadimg"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <section class="add-expense hidden" id="add-sec">
           <div class="head2">
             <h2>Add New Expense</h2>
           </div>
@@ -83,20 +116,71 @@
           </form>
         </section>
 
+        <div>
+          <button type="button" class="flt-btn" id="flot-btn">
+            <p>+</p>
+          </button>
+        </div>
+
         <div class="dis-expense-wrapper">
           <div class="dis-expense">
-            <p class="texpense">Total Expense</p>
+            <p class="texpense">Total Spent</p>
             <p class="tamount">0</p>
           </div>
           <div class="dis-expense">
-            <p class="texpense">Total Entries</p>
+            <p class="texpense">Transactions</p>
             <p class="tentries">0</p>
           </div>
           <div class="dis-expense">
-            <p class="texpense">Current month Expense</p>
+            <p class="texpense">Monthly Spend</p>
             <p class="tmonth">0</p>
           </div>
         </div>
+
+        <section class="chartwrapper">
+          <div class="chart">
+            <div class="chart-head">
+              <h2>Expense by category</h2>
+
+              <select name="chart-type" class="chart-select" id="total-select">
+                <option value="bar">Bar Chart</option>
+                <option value="bubble">Bubble Chart</option>
+                <option value="doughnut">Doughnut & Pie Chart</option>
+                <option value="line">Line Chart</option>
+                <option value="polarArea">Polar Chart</option>
+                <option value="radar">Radar Chart</option>
+                <option value="scatter">Scatter Chart</option>
+              </select>
+            </div>
+            <div>
+              <canvas id="chart-total"></canvas>
+            </div>
+          </div>
+
+          <div class="chart">
+            <div class="chart-head">
+              <h2>Category Analysis</h2>
+              <select
+                name="chart-type"
+                class="chart-select"
+                id="category-select"
+              >
+                <option value="food">Area Chart</option>
+                <option value="bar">Bar Chart</option>
+                <option value="bubble">Bubble Chart</option>
+                <option value="doughnut">Doughnut & Pie Chart</option>
+                <option value="line">Line Chart</option>
+                <option value="studies">Mix Chart</option>
+                <option value="polarArea">Polar Chart</option>
+                <option value="radar">Radar Chart</option>
+                <option value="scatter">Scatter Chart</option>
+              </select>
+            </div>
+            <div>
+              <canvas id="chart-category"></canvas>
+            </div>
+          </div>
+        </section>
 
         <section class="filter-wrapper">
           <label for="fil-category" class="fil">Filter by category:</label>
@@ -110,6 +194,24 @@
         <div class="dis-wrapper">
           <!-- dynamic cards rendered in js -->
         </div>
+
+        <div class="edit-wrapper">
+          <div class="edit-amt-name">
+            <div>
+              <span>Edit Title:</span>
+              <input type="text" name="" class="edit-inp"  id="edit-title"/>
+            </div>
+            <div>
+              <span>Edit Amount:</span>
+              <input type="number" name="" class="edit-inp" id="edit-amount" />
+            </div>
+          </div>
+          <div class="confirm-edit">
+            <button type="button" class="edit-btn" id="save-btn">
+              <img src="./assets/save.png" />
+            </button>
+          </div>
+        </div>
       </div>
     </main>
 
@@ -120,6 +222,7 @@
         <p>using Javascript</p>
       </div>
     </footer>
-    <script src="code.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="code.js" type="module"></script>
   </body>
 </html>

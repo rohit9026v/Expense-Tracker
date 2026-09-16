@@ -1,3 +1,4 @@
+import drawChart from "./chart.js";
 let headerDateTime = document.querySelector("#pdate-time");
 let inpTitle = document.querySelector("#inp-title");
 let inpAmount = document.querySelector("#inp-amount");
@@ -21,7 +22,46 @@ function getExpense() {
   return JSON.parse(localStorage.getItem("expense")) || [];
 }
 
+//dark mode
+
+const darkBtn = document.querySelector("#dark-btn");
+
+function getDark() {
+  return JSON.parse(localStorage.getItem("isDark")) ?? null;
+}
+
+if (getDark()) {
+  document.body.classList.add("dark-mode");
+} else {
+  document.body.classList.remove("dark-mode");
+}
+
+function setDark(dark) {
+  localStorage.setItem("isDark", JSON.stringify(dark));
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark-mode");
+  let dark = !getDark();
+  setDark(dark);
+}
+
+darkBtn.addEventListener("click", toggleTheme);
+
+//profile sec
+
+//function on print button
+const printBtn = document.querySelector("#printbtn");
+
+printBtn.addEventListener("click", () => {
+  window.print();
+});
+
+//function on upload input
+
 //function on add button
+
+const addSec = document.querySelector("#add-sec");
 
 addButton.addEventListener("click", () => {
   let title = inpTitle.value.trim();
@@ -46,6 +86,7 @@ addButton.addEventListener("click", () => {
     title,
     expense,
     time,
+    id: Date.now(),
   });
 
   localStorage.setItem("expense", JSON.stringify(expenseArr));
@@ -54,11 +95,21 @@ addButton.addEventListener("click", () => {
   monthTExp();
   renderCategories();
   renderCategoryDis();
-  inpAmount.value = "";
-  inpTitle.value = "";
+  renderTotChart("bar"); //Total expense chart rendered
+  floatingBtn.classList.remove("hidden"); //floating button visible
+  addSec.classList.add("hidden"); //add sec hided
+  inpAmount.value = ""; //amount feild set to empty
+  inpTitle.value = ""; //title feild set to empty
 });
 
-//category wise date display
+//floating add button
+
+const floatingBtn = document.querySelector("#flot-btn");
+
+floatingBtn.addEventListener("click", () => {
+  floatingBtn.classList.add("hidden");
+  addSec.classList.remove("hidden");
+});
 
 //total expense display
 
@@ -91,10 +142,66 @@ function monthTExp() {
         today.getFullYear() == expDate.getFullYear()
       );
     })
-    .reduce((acc, current) => acc + current.expense, 0);
+    .reduce((acc, current) => acc + Number(current.expense), 0);
   tMonth.innerText = filtered;
 }
 monthTExp();
+
+//chart type selection
+
+const chartWrapper = document.querySelector(".chartwrapper");
+chartWrapper.addEventListener("change", (e) => {
+  const total = e.target.closest("#total-select");
+  const category = e.target.closest("#category-select");
+
+  if (!category && !total) return;
+
+  if (total) {
+    renderTotChart(e.target.value);
+  } else if (category) {
+    console.log(e.target.value);
+    renderCatChart(e.target.value);
+  }
+});
+
+//dynamic Total chart fuction
+
+const chartTotal = document.querySelector("#chart-total");
+function renderTotChart(type) {
+  const expArr = getExpense().reduce((acc, current) => {
+    const isExisted = acc.find((item) => item.category === current.category);
+    if (isExisted) {
+      isExisted.amount += current.expense;
+    } else {
+      const obj = {
+        title: current.category,
+        amount: current.expense,
+      };
+      acc.push(obj);
+    }
+    return acc;
+  }, []);
+  drawChart(chartTotal, type, expArr);
+}
+
+renderTotChart("bar");
+
+//dynamic category chart functinn
+
+const chartCat = document.querySelector("#chart-category");
+function renderCatChart(type) {
+  const expArr = getExpense().reduce((acc, current) => {
+    const obj = {
+      title: current.title,
+      amount: current.expense,
+    };
+    acc.push(obj);
+    return acc;
+  }, []);
+  drawChart(chartCat, type, expArr);
+}
+
+renderCatChart("bar");
 
 //dynamic filter option
 
@@ -106,10 +213,7 @@ function renderCategories() {
   item.value = "all-category";
   categoryFilt.appendChild(item);
 
-  const list = getExpense().map((item) => {
-    return item.category;
-  });
-
+  const list = getExpense().map((item) => item.category);
   const categories = [...new Set([...list])].sort();
 
   for (let i = 0; i < categories.length; i++) {
@@ -171,7 +275,25 @@ function renderCategoryDis() {
     categoryDiv.appendChild(para); //sub-child 2 appended
     wrapperDiv.appendChild(categoryDiv); //child 1 appended
 
-    const categoryAmtDiv = document.createElement("div"); //child 2
+    const expenseLi = document.createElement("div"); //child 2
+    expenseLi.className = "listdiv";
+    const list = document.createElement("select");
+    list.className = "list";
+
+    const count = getExpense();
+
+    for (let i = 0; i < count.length; i++) {
+      if (count[i].category == item) {
+        const listItem = document.createElement("option");
+        listItem.innerText = count[i].title;
+        listItem.id = count[i].id;
+        list.appendChild(listItem);
+      }
+    }
+    expenseLi.appendChild(list);
+    wrapperDiv.appendChild(expenseLi);
+
+    const categoryAmtDiv = document.createElement("div"); //child 3
     categoryAmtDiv.className = "category-amount";
 
     const expenseDetails = document.createElement("div"); //sub-child 1
@@ -188,7 +310,15 @@ function renderCategoryDis() {
     expenseDetails.appendChild(span);
     categoryAmtDiv.appendChild(expenseDetails); // sub child 1 appended
 
-    const deleteDiv = document.createElement("div");
+    const edit = document.createElement("button"); //sub child 2 created
+    edit.className = "editExp";
+    edit.id = edit;
+    const img = document.createElement("img");
+    img.src = "./assets/edit.png";
+    edit.appendChild(img);
+    categoryAmtDiv.appendChild(edit); //sub child 2 appended
+
+    const deleteDiv = document.createElement("div"); //sub child 3 created
     deleteDiv.className = "delete";
     const deleteButton = document.createElement("button");
     deleteButton.className = "delete-btn";
@@ -199,7 +329,7 @@ function renderCategoryDis() {
     deleteButton.appendChild(buttonImg);
     deleteDiv.appendChild(deleteButton);
 
-    categoryAmtDiv.appendChild(deleteDiv); //sub-child 2 appended
+    categoryAmtDiv.appendChild(deleteDiv); //sub-child 3 appended
     wrapperDiv.appendChild(categoryAmtDiv); // child 2 appended
 
     disWrapper.appendChild(wrapperDiv); //appended to a common wrapper
@@ -207,6 +337,78 @@ function renderCategoryDis() {
 }
 
 renderCategoryDis();
+
+//event on list in individual expense
+
+disWrapper.addEventListener("change", (e) => {
+  const list = e.target.closest(".list");
+  if (!list) {
+    return;
+  }
+
+  const exp = getExpense().find(
+    (item) => item.id == e.target.selectedOptions[0].id,
+  );
+  const amt = disWrapper.querySelector(`#${exp.category}`);
+  const time = disWrapper.querySelector(`#${exp.category}-time`);
+  amt.innerText = `₹ ${exp.expense}`;
+  time.innerText = exp.time;
+});
+
+//event on edit button
+const editAmt = document.querySelector("#edit-amount");
+const editTitle = document.querySelector("#edit-title");
+let editId;
+
+disWrapper.addEventListener("click", (e) => {
+  const editbtn = e.target.closest(".editExp");
+  if (!editbtn) {
+    return;
+  }
+
+  const expItem = e.target.closest(".exp-dis").querySelector(".list");
+
+  const item = getExpense().find(
+    (item) => item.id == expItem.selectedOptions[0].id,
+  );
+  editId = item.id;
+  editAmt.value = item.expense;
+  editTitle.value = item.title;
+});
+
+//function on save button
+
+function saveEdit() {
+  if (
+    editTitle.value.trim() === "" ||
+    !Number.isFinite(Number(editAmt.value)) ||
+    Number(editAmt.value) <= 0
+  ) {
+    return;
+  }
+
+  if (editId === null) {
+    return;
+  }
+  const updatedList = getExpense();
+  updatedList.forEach((element) => {
+    if (element.id == editId) {
+      element.title = editTitle.value;
+      element.expense = Number(editAmt.value);
+    }
+  });
+  localStorage.setItem("expense", JSON.stringify(updatedList)); //item updated
+  editAmt.value = "";
+  editTitle.value = "";
+  editId = null;
+  totalExpdis();
+  monthTExp();
+  renderCategoryDis();
+  renderTotChart("bar"); //Total expense chart rendered
+}
+
+const saveBtn = document.querySelector("#save-btn");
+saveBtn.addEventListener("click", saveEdit);
 
 //category wise delete button
 
@@ -231,5 +433,6 @@ disWrapper.addEventListener("click", (e) => {
     monthTExp();
     renderCategories();
     renderCategoryDis();
+    renderTotChart("bar");
   }
 });
