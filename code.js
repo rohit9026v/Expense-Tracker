@@ -356,9 +356,8 @@ disWrapper.addEventListener("change", (e) => {
 });
 
 //event on edit button
-const editAmt = document.querySelector("#edit-amount");
-const editTitle = document.querySelector("#edit-title");
-let editId;
+
+let editId = null;
 
 disWrapper.addEventListener("click", (e) => {
   const editbtn = e.target.closest(".editExp");
@@ -366,19 +365,89 @@ disWrapper.addEventListener("click", (e) => {
     return;
   }
 
-  const expItem = e.target.closest(".exp-dis").querySelector(".list");
+  let currentCard = editbtn.closest(".exp-dis");
+
+  const expItem = currentCard.querySelector(".list");
 
   const item = getExpense().find(
     (item) => item.id == expItem.selectedOptions[0].id,
   );
   editId = item.id;
-  editAmt.value = item.expense;
-  editTitle.value = item.title;
+  const card = renderEdit(item.title, item.expense);
+
+  if (card) {
+    currentCard.after(card);
+  }
 });
+
+//Render edit card
+
+function renderEdit(title, amount) {
+  const isExisted = document.querySelector(".edit-wrapper");
+  if (isExisted) {
+    alert("Kindly save existing edit");
+    return;
+  }
+
+  const wrapper = document.createElement("div"); //parent
+  wrapper.className = "edit-wrapper";
+
+  const editdiv = document.createElement("div"); //child 1
+  editdiv.className = "edit-amt-name";
+
+  const editTitleDiv = document.createElement("div"); //sub child 1
+  editTitleDiv.className = "edit-title-group";
+  const spanT = document.createElement("span");
+  spanT.className = "edit-label";
+  spanT.innerText = "Edit Title";
+  const editTitle = document.createElement("input");
+  editTitle.className = "edit-inp";
+  editTitle.id = "edit-title";
+  editTitle.type = "text";
+  editTitle.value = title;
+  editTitleDiv.appendChild(spanT);
+  editTitleDiv.appendChild(editTitle);
+  editdiv.appendChild(editTitleDiv);
+
+  const editAmtDiv = document.createElement("div"); //sub child 2
+  editAmtDiv.className = "edit-amount-group";
+  const spanA = document.createElement("span");
+  spanA.innerText = "Edit Amount";
+  const editAmt = document.createElement("input");
+  editAmt.className = "edit-inp";
+  editAmt.id = "edit-amount";
+  editAmt.type = "number";
+  editAmt.value = amount;
+  editAmtDiv.appendChild(spanA);
+  editAmtDiv.appendChild(editAmt);
+  editdiv.appendChild(editAmtDiv);
+
+  wrapper.appendChild(editdiv);
+
+  const cnfDiv = document.createElement("div"); //child 2
+  cnfDiv.className = "confirm-edit";
+  const cnfBtn = document.createElement("button"); //sub child 1
+  cnfBtn.className = "edit-btn";
+  cnfBtn.type = "button";
+  cnfBtn.id = "save-btn";
+  cnfBtn.addEventListener("click", () => {
+    saveEdit(editTitle, editAmt);
+  });
+  const img = document.createElement("img");
+  img.className = "edit-save-icon";
+  img.src = "./assets/save.png";
+  img.alt = "save Butoon";
+  cnfBtn.appendChild(img);
+  cnfDiv.appendChild(cnfBtn);
+
+  wrapper.appendChild(cnfDiv);
+
+  return wrapper;
+}
 
 //function on save button
 
-function saveEdit() {
+function saveEdit(editTitle, editAmt) {
   if (
     editTitle.value.trim() === "" ||
     !Number.isFinite(Number(editAmt.value)) ||
@@ -390,25 +459,26 @@ function saveEdit() {
   if (editId === null) {
     return;
   }
-  const updatedList = getExpense();
-  updatedList.forEach((element) => {
-    if (element.id == editId) {
-      element.title = editTitle.value;
-      element.expense = Number(editAmt.value);
-    }
-  });
-  localStorage.setItem("expense", JSON.stringify(updatedList)); //item updated
-  editAmt.value = "";
-  editTitle.value = "";
-  editId = null;
-  totalExpdis();
-  monthTExp();
-  renderCategoryDis();
-  renderTotChart("bar"); //Total expense chart rendered
-}
 
-const saveBtn = document.querySelector("#save-btn");
-saveBtn.addEventListener("click", saveEdit);
+  const confirmation = confirm("Do you want to save changes");
+  if (confirmation) {
+    const updatedList = getExpense();
+    updatedList.forEach((element) => {
+      if (element.id == editId) {
+        element.title = editTitle.value;
+        element.expense = Number(editAmt.value);
+      }
+    });
+    localStorage.setItem("expense", JSON.stringify(updatedList)); //item updated
+    editAmt.value = "";
+    editTitle.value = "";
+    editId = null;
+    totalExpdis();
+    monthTExp();
+    renderCategoryDis();
+    renderTotChart("bar"); //Total expense chart rendered
+  }
+}
 
 //category wise delete button
 
