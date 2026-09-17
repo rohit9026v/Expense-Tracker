@@ -93,7 +93,7 @@ addButton.addEventListener("click", () => {
   totalExpdis();
   totalEntries();
   monthTExp();
-  renderCategories();
+  renderCategories(categoryFilt, true);
   renderCategoryDis();
   renderTotChart("bar"); //Total expense chart rendered
   floatingBtn.classList.remove("hidden"); //floating button visible
@@ -119,7 +119,7 @@ function totalExpdis() {
     0,
   );
 
-  tAmount.innerText = exp;
+  tAmount.innerText = `₹ ${exp}`;
 }
 totalExpdis();
 
@@ -143,7 +143,7 @@ function monthTExp() {
       );
     })
     .reduce((acc, current) => acc + Number(current.expense), 0);
-  tMonth.innerText = filtered;
+  tMonth.innerText = `₹ ${filtered}`;
 }
 monthTExp();
 
@@ -203,33 +203,35 @@ function renderCatChart(type) {
 
 renderCatChart("bar");
 
-//dynamic filter option
+//dynamic Select option
 
-function renderCategories() {
-  categoryFilt.innerHTML = "";
-
-  const item = document.createElement("option");
-  item.innerText = "All Category";
-  item.value = "all-category";
-  categoryFilt.appendChild(item);
+function renderCategories(appendTo, includeAll = false) {
+  if (includeAll) {
+    appendTo.innerHTML = ` <option value="all-category">All CATEGORIES</option>`;
+  } else {
+    appendTo.innerHTML = "";
+  }
 
   const list = getExpense().map((item) => item.category);
-  const categories = [...new Set([...list])].sort();
+  const categories = [...new Set(list)].sort();
 
   for (let i = 0; i < categories.length; i++) {
     const item = document.createElement("option");
-    item.innerText = categories[i];
+
+    item.innerText = categories[i].toUpperCase();
     item.value = categories[i];
-    categoryFilt.appendChild(item);
+
+    appendTo.appendChild(item);
   }
 }
 
-renderCategories();
+renderCategories(categoryFilt, true);
 
 //applying filter
 
 let category = document.querySelectorAll(".exp-dis");
 categoryFilt.addEventListener("change", () => {
+  let category = document.querySelectorAll(".exp-dis");
   category.forEach((element) => {
     element.classList.remove("hidden");
     if (
@@ -501,7 +503,7 @@ disWrapper.addEventListener("click", (e) => {
     totalExpdis();
     totalEntries();
     monthTExp();
-    renderCategories();
+    renderCategories(categoryFilt, true);
     renderCategoryDis();
     renderTotChart("bar");
   }

@@ -42,6 +42,7 @@ html {
   --button-color: rgb(1, 168, 87);
   --primary-color: white;
   --shadow-color: rgba(1, 168, 87, 0.5);
+  --caret-color: black;
 }
 
 .dark-mode {
@@ -55,6 +56,7 @@ html {
   --button-color: #6366f1;
   --primary-color: #171a28;
   --shadow-color: rgba(99, 102, 241, 0.35);
+  --caret-color: white;
 }
 
 body {
@@ -239,7 +241,7 @@ h2 {
   border-radius: 5px;
   border: 0.5px solid var(--border-color);
   padding: 0 2rem;
-  caret-color: black;
+  caret-color: var(--caret-color);
   color: var(--input-color);
   background-color: var(--input-bg-color);
 }
@@ -555,6 +557,7 @@ canvas {
   color: var(--input-color);
   background-color: var(--input-bg-color);
   padding: 0 2rem;
+  caret-color: var(--caret-color);
 }
 
 .edit-btn {
