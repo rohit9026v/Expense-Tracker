@@ -11,8 +11,8 @@ const drawChart = (canvas, type, data) => {
       datasets: [
         {
           label: data.map((item) => item.title),
-          data: data.map((item) => item.amount),
-          borderWidth: 1,
+          data: data.map((item) => item.expense),
+          borderWidth: 2,
         },
       ],
     },

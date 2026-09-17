@@ -1,14 +1,14 @@
 import drawChart from "./chart.js";
-let headerDateTime = document.querySelector("#pdate-time");
-let inpTitle = document.querySelector("#inp-title");
-let inpAmount = document.querySelector("#inp-amount");
-let inpCategory = document.querySelector("#inp-category");
-let addButton = document.querySelector("#add-btn");
-let tAmount = document.querySelector(".tamount");
-let tEntries = document.querySelector(".tentries");
-let tMonth = document.querySelector(".tmonth");
-let categoryFilt = document.querySelector("#fil-category");
-let disWrapper = document.querySelector(".dis-wrapper");
+const headerDateTime = document.querySelector("#pdate-time");
+const inpTitle = document.querySelector("#inp-title");
+const inpAmount = document.querySelector("#inp-amount");
+const inpCategory = document.querySelector("#inp-category");
+const addButton = document.querySelector("#add-btn");
+const tAmount = document.querySelector(".tamount");
+const tEntries = document.querySelector(".tentries");
+const tMonth = document.querySelector(".tmonth");
+const categoryFilt = document.querySelector("#fil-category");
+const disWrapper = document.querySelector(".dis-wrapper");
 
 //date and time Updation
 
@@ -95,9 +95,10 @@ addButton.addEventListener("click", () => {
   monthTExp();
   renderCategories(categoryFilt, true);
   renderCategoryDis();
-  renderTotChart("bar"); //Total expense chart rendered
+  renderTotChart("bar"); //Total expense chart Updated
+  renderCatChart("clothing"); //Category chart Updated
   floatingBtn.classList.remove("hidden"); //floating button visible
-  addSec.classList.add("hidden"); //add sec hided
+  addSec.classList.add("hidden"); //add sec hide
   inpAmount.value = ""; //amount feild set to empty
   inpTitle.value = ""; //title feild set to empty
 });
@@ -147,7 +148,7 @@ function monthTExp() {
 }
 monthTExp();
 
-//chart type selection
+//chart type&category selection
 
 const chartWrapper = document.querySelector(".chartwrapper");
 chartWrapper.addEventListener("change", (e) => {
@@ -159,49 +160,46 @@ chartWrapper.addEventListener("change", (e) => {
   if (total) {
     renderTotChart(e.target.value);
   } else if (category) {
-    console.log(e.target.value);
     renderCatChart(e.target.value);
   }
 });
 
 //dynamic Total chart fuction
 
-const chartTotal = document.querySelector("#chart-total");
+const totalCanvas = document.querySelector("#total-canvas");
 function renderTotChart(type) {
   const expArr = getExpense().reduce((acc, current) => {
-    const isExisted = acc.find((item) => item.category === current.category);
+    const isExisted = acc.find((item) => item.title === current.category);
     if (isExisted) {
-      isExisted.amount += current.expense;
+      isExisted.expense += current.expense;
     } else {
       const obj = {
         title: current.category,
-        amount: current.expense,
+        expense: current.expense,
       };
       acc.push(obj);
     }
     return acc;
   }, []);
-  drawChart(chartTotal, type, expArr);
+  drawChart(totalCanvas, type, expArr);
 }
 
 renderTotChart("bar");
 
+//dynamic category charts options
+
+const categoryChart = document.querySelector("#category-select");
+renderCategories(categoryChart);
+
 //dynamic category chart functinn
 
-const chartCat = document.querySelector("#chart-category");
-function renderCatChart(type) {
-  const expArr = getExpense().reduce((acc, current) => {
-    const obj = {
-      title: current.title,
-      amount: current.expense,
-    };
-    acc.push(obj);
-    return acc;
-  }, []);
-  drawChart(chartCat, type, expArr);
+const categoryCanvas = document.querySelector("#category-canvas");
+function renderCatChart(category) {
+  const expArr = getExpense().filter((item) => item.category === category);
+  drawChart(categoryCanvas, "doughnut", expArr);
 }
 
-renderCatChart("bar");
+renderCatChart("clothing");
 
 //dynamic Select option
 
@@ -243,7 +241,13 @@ categoryFilt.addEventListener("change", () => {
   });
 });
 
-//dynamic category display
+//category card total amount function
+function calculateCatTotal(){
+
+}
+
+
+//dynamic category Card display
 
 function renderCategoryDis() {
   disWrapper.innerHTML = "";
@@ -283,7 +287,13 @@ function renderCategoryDis() {
     list.className = "list";
 
     const count = getExpense();
+    //static option
+    const listItem = document.createElement("option");
+    listItem.innerText = "Category Expenses";
+    listItem.id = "all-categories ";
+    list.appendChild(listItem);
 
+    //dynamic list option
     for (let i = 0; i < count.length; i++) {
       if (count[i].category == item) {
         const listItem = document.createElement("option");
@@ -360,7 +370,6 @@ disWrapper.addEventListener("change", (e) => {
 //event on edit button
 
 let editId = null;
-
 disWrapper.addEventListener("click", (e) => {
   const editbtn = e.target.closest(".editExp");
   if (!editbtn) {
