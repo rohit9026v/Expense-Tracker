@@ -17,15 +17,27 @@ setInterval(() => {
 }, 1000);
 
 //Getting data from Local Storage...
-
 function getExpense() {
   return JSON.parse(localStorage.getItem("expense")) || [];
 }
+let expenseArr = getExpense();
 
 //Setting data to Local STorage...
 
 function setLocal(name, arr) {
   return localStorage.setItem(name, JSON.stringify(arr));
+}
+
+//Fn for updating UI
+
+function updateUI(){
+  totalExpdis();
+  totalEntries();
+  monthTExp();
+  renderCategories(categoryFilt, true);
+  renderCatCard();
+  renderTotChart("bar"); //Total expense chart Updated
+  renderCatChart("clothing"); //Category chart Updated
 }
 
 //dark mode
@@ -85,8 +97,6 @@ addButton.addEventListener("click", () => {
     return;
   }
 
-  const expenseArr = getExpense();
-
   expenseArr.push({
     category,
     title,
@@ -96,13 +106,7 @@ addButton.addEventListener("click", () => {
   });
 
   setLocal("expense", expenseArr);
-  totalExpdis();
-  totalEntries();
-  monthTExp();
-  renderCategories(categoryFilt, true);
-  renderCatCard();
-  renderTotChart("bar"); //Total expense chart Updated
-  renderCatChart("clothing"); //Category chart Updated
+  updateUI()
   floatingBtn.classList.remove("hidden"); //floating button visible
   addSec.classList.add("hidden"); //add sec hide
   inpAmount.value = ""; //amount feild set to empty
@@ -121,7 +125,7 @@ floatingBtn.addEventListener("click", () => {
 //total expense display
 
 function totalExpdis() {
-  let exp = getExpense().reduce(
+  let exp = expenseArr.reduce(
     (acc, current) => acc + Number(current.expense),
     0,
   );
@@ -133,7 +137,7 @@ totalExpdis();
 //total entries display
 
 function totalEntries() {
-  tEntries.innerText = getExpense().length;
+  tEntries.innerText = expenseArr.length;
 }
 totalEntries();
 
@@ -141,7 +145,7 @@ totalEntries();
 
 function monthTExp() {
   let today = new Date();
-  const filtered = getExpense()
+  const filtered = expenseArr
     .filter((item) => {
       let expDate = new Date(item.time);
       return (
@@ -174,7 +178,7 @@ chartWrapper.addEventListener("change", (e) => {
 
 const totalCanvas = document.querySelector("#total-canvas");
 function renderTotChart(type) {
-  const expArr = getExpense().reduce((acc, current) => {
+  const expArr = expenseArr.reduce((acc, current) => {
     const isExisted = acc.find((item) => item.title === current.category);
     if (isExisted) {
       isExisted.expense += current.expense;
@@ -201,7 +205,7 @@ renderCategories(categoryChart);
 
 const categoryCanvas = document.querySelector("#category-canvas");
 function renderCatChart(category) {
-  const expArr = getExpense().filter((item) => item.category === category);
+  const expArr = expenseArr.filter((item) => item.category === category);
   drawChart(categoryCanvas, "doughnut", expArr);
 }
 
@@ -216,7 +220,7 @@ function renderCategories(appendTo, includeAll = false) {
     appendTo.innerHTML = "";
   }
 
-  const list = getExpense().map((item) => item.category);
+  const list = expenseArr.map((item) => item.category);
   const categories = [...new Set(list)].sort();
 
   for (let i = 0; i < categories.length; i++) {
@@ -245,12 +249,6 @@ categoryFilt.addEventListener("change", () => {
       element.classList.add("hidden");
     }
   });
-});
-
-//Getting unique Category from Local Storage
-
-const getUniqueCat = getExpense().map((item) => {
-  return item.category;
 });
 
 //Create Category card
@@ -324,7 +322,7 @@ function createCategoryCard(category, amt, time) {
 //dynamic options for select in category card
 
 function renderOptCategory(appendto, category) {
-  const count = getExpense();
+  const count = expenseArr;
 
   //static option
   const option = document.createElement("option");
@@ -347,10 +345,12 @@ function renderOptCategory(appendto, category) {
 
 function renderCatCard() {
   disWrapper.innerHTML = "";
-  const categories = [...new Set([...getUniqueCat])].sort();
+  const categories = [
+    ...new Set(expenseArr.map((item) => item.category)),
+  ].sort();
   categories.forEach((item) => {
     let time;
-    const finalAmt = getExpense().reduce((acc, current) => {
+    const finalAmt = expenseArr.reduce((acc, current) => {
       if (current.category == item) {
         acc += Number(current.expense);
         time = current.time;
@@ -372,7 +372,7 @@ disWrapper.addEventListener("change", (e) => {
     return;
   }
 
-  const exp = getExpense().find(
+  const exp = expenseArr.find(
     (item) => item.id == e.target.selectedOptions[0].id,
   );
   const amt = disWrapper.querySelector(`#${exp.category}`);
@@ -404,7 +404,7 @@ disWrapper.addEventListener("click", (e) => {
     return;
   }
 
-  const item = getExpense().find(
+  const item = expenseArr.find(
     (item) => item.id == expItem.selectedOptions[0].id,
   );
   editId = item.id;
@@ -496,20 +496,16 @@ function saveEdit(title, amount) {
   const confirmation = confirm("Do you want to save changes");
 
   if (confirmation) {
-    const updatedList = getExpense();
-    updatedList.forEach((element) => {
+    expenseArr.forEach((element) => {
       if (element.id === editId) {
         element.title = title;
         element.expense = amount;
       }
     });
 
-    setLocal("expense", updatedList);
+    setLocal("expense", expenseArr);
     editId = null;
-    totalExpdis();
-    monthTExp();
-    renderCatCard();
-    renderTotChart("bar"); //Total expense chart rendered
+    updateUI()
   }
 }
 
@@ -526,16 +522,10 @@ disWrapper.addEventListener("click", (e) => {
   if (confirm("Are you sure you want to delete this entire expense")) {
     let amount = e.target.closest(".category-amount").querySelector(".exp");
     let id = amount.getAttribute("id");
-    let updatedArr = getExpense().filter((item) => item.category !== id);
-    setLocal("expense", updatedArr);
+    expenseArr = expenseArr.filter((item) => item.category !== id);
 
     //Update amount displayed
-
-    totalExpdis();
-    totalEntries();
-    monthTExp();
-    renderCategories(categoryFilt, true);
-    renderCatCard();
-    renderTotChart("bar");
+    setLocal("expense", expenseArr);
+    updateUI();
   }
 });
