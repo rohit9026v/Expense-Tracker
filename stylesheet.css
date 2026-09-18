@@ -400,7 +400,8 @@ canvas {
   border-radius: 8px;
   display: flex;
   align-items: center;
-  padding: 2rem 2rem;
+  justify-content: space-between;
+  padding: 2rem 4rem;
   gap: 2rem;
   background-color: var(--card-color);
   color: var(--text-color);
@@ -418,6 +419,7 @@ canvas {
   border: 1px solid var(--border-color);
   cursor: pointer;
   padding: 0 2rem;
+  margin-left: 2rem;
   color: var(--input-color);
   background-color: var(--input-bg-color);
 }

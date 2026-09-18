@@ -175,10 +175,22 @@
         </section>
 
         <section class="filter-wrapper">
-          <label for="fil-category" class="fil">Filter by category:</label>
-          <select name="fil-category" id="fil-category" class="fil-category">
-            <!-- dynamic option rendered in js -->
-          </select>
+          <div>
+            <label for="fil-category" class="fil">Filter by category:</label>
+            <select name="fil-category" id="fil-category" class="fil-category">
+              <!-- dynamic option rendered in js -->
+            </select>
+          </div>
+
+          <div>
+            <label for="sort-by" class="fil">Sort by:</label>
+            <select name="sort-by" id="sort-by" class="fil-category">
+              <option value="bar">NAME</option>
+              <option value="line">AMOUNT</option>
+              <option value="bubble">DATE</option>
+              <option value="doughnut">NO. OF TRANS</option>
+            </select>
+          </div>
         </section>
 
         <h2 class="expheads">Your Expenses</h2>
