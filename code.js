@@ -22,6 +22,12 @@ function getExpense() {
   return JSON.parse(localStorage.getItem("expense")) || [];
 }
 
+//Setting data to Local STorage...
+
+function setLocal(name, arr) {
+  return localStorage.setItem(name, JSON.stringify(arr));
+}
+
 //dark mode
 
 const darkBtn = document.querySelector("#dark-btn");
@@ -37,7 +43,7 @@ if (getDark()) {
 }
 
 function setDark(dark) {
-  localStorage.setItem("isDark", JSON.stringify(dark));
+  setLocal("isDark", dark);
 }
 
 function toggleTheme() {
@@ -89,12 +95,12 @@ addButton.addEventListener("click", () => {
     id: Date.now(),
   });
 
-  localStorage.setItem("expense", JSON.stringify(expenseArr));
+  setLocal("expense", expenseArr);
   totalExpdis();
   totalEntries();
   monthTExp();
   renderCategories(categoryFilt, true);
-  renderCategoryDis();
+  renderCatCard();
   renderTotChart("bar"); //Total expense chart Updated
   renderCatChart("clothing"); //Category chart Updated
   floatingBtn.classList.remove("hidden"); //floating button visible
@@ -241,21 +247,107 @@ categoryFilt.addEventListener("change", () => {
   });
 });
 
-//category card total amount function
-function calculateCatTotal(){
+//Getting unique Category from Local Storage
 
+const getUniqueCat = getExpense().map((item) => {
+  return item.category;
+});
+
+//Create Category card
+
+function createCategoryCard(category, amt, time) {
+  const wrapperDiv = document.createElement("div");
+  wrapperDiv.className = `exp-dis ${category}`; //yha ek aur class add krni hai category ki  Done
+
+  const categoryDiv = document.createElement("div"); //child 1
+  categoryDiv.className = "category";
+  const icon = document.createElement("img"); // image tag created
+  icon.className = "category-icon";
+  icon.alt = "category-icon";
+  icon.src = `./assets/${category}.png`; //dynamic images src yet to be added
+  categoryDiv.appendChild(icon); //sub-child 1
+  const para = document.createElement("p"); //p tag created
+  para.innerText = category.toUpperCase(); //dynamic name
+  categoryDiv.appendChild(para); //sub-child 2 appended
+  wrapperDiv.appendChild(categoryDiv); //child 1 appended
+
+  const expenseLi = document.createElement("div"); //child 2
+  expenseLi.className = "listdiv";
+  const list = document.createElement("select");
+  list.className = "list";
+  renderOptCategory(list, category);
+  expenseLi.appendChild(list);
+  wrapperDiv.appendChild(expenseLi);
+
+  const categoryAmtDiv = document.createElement("div"); //child 3
+  categoryAmtDiv.className = "category-amount";
+
+  const expenseDetails = document.createElement("div"); //sub-child 1
+  expenseDetails.className = "exp-dt";
+  const amtPara = document.createElement("p");
+  amtPara.className = "exp amount";
+  amtPara.innerText = `₹ ${amt}`; //category final amt is yet to be added
+  amtPara.id = category; //dynamic id
+  expenseDetails.appendChild(amtPara);
+  const span = document.createElement("span");
+  span.className = "d-t";
+  span.id = `${category}-time`; //time is yet to be aded
+  span.innerText = time;
+  expenseDetails.appendChild(span);
+  categoryAmtDiv.appendChild(expenseDetails); // sub child 1 appended
+
+  const edit = document.createElement("button"); //sub child 2 created
+  edit.className = "editExp";
+  edit.id = edit;
+  const img = document.createElement("img");
+  img.src = "./assets/edit.png";
+  edit.appendChild(img);
+  categoryAmtDiv.appendChild(edit); //sub child 2 appended
+
+  const deleteDiv = document.createElement("div"); //sub child 3 created
+  deleteDiv.className = "delete";
+  const deleteButton = document.createElement("button");
+  deleteButton.className = "delete-btn";
+  deleteButton.type = "button";
+  const buttonImg = document.createElement("img");
+  buttonImg.className = "delete-img";
+  buttonImg.src = "./assets/delete.png";
+  deleteButton.appendChild(buttonImg);
+  deleteDiv.appendChild(deleteButton);
+
+  categoryAmtDiv.appendChild(deleteDiv); //sub-child 3 appended
+  wrapperDiv.appendChild(categoryAmtDiv); // child 2 appended
+
+  return wrapperDiv;
 }
 
+//dynamic options for select in category card
+
+function renderOptCategory(appendto, category) {
+  const count = getExpense();
+
+  //static option
+  const option = document.createElement("option");
+  option.innerText = "Category Expenses";
+  option.id = "all-categories";
+  appendto.appendChild(option);
+
+  //dynamic list option
+  for (let i = 0; i < count.length; i++) {
+    if (count[i].category == category) {
+      const option = document.createElement("option");
+      option.innerText = count[i].title;
+      option.id = count[i].id;
+      appendto.appendChild(option);
+    }
+  }
+}
 
 //dynamic category Card display
 
-function renderCategoryDis() {
+function renderCatCard() {
   disWrapper.innerHTML = "";
-  const list = getExpense().map((item) => {
-    return item.category;
-  });
-
-  const categories = [...new Set([...list])].sort();
+  const categories = [...new Set([...getUniqueCat])].sort();
   categories.forEach((item) => {
     let time;
     const finalAmt = getExpense().reduce((acc, current) => {
@@ -265,90 +357,12 @@ function renderCategoryDis() {
       }
       return acc;
     }, 0);
-
-    const wrapperDiv = document.createElement("div");
-    wrapperDiv.className = `exp-dis ${item}`; //yha ek aur class add krni hai category ki  Done
-
-    const categoryDiv = document.createElement("div"); //child 1
-    categoryDiv.className = "category";
-    const icon = document.createElement("img"); // image tag created
-    icon.className = "category-icon";
-    icon.alt = "category-icon";
-    icon.src = `./assets/${item}.png`; //dynamic images
-    categoryDiv.appendChild(icon); //sub-child 1
-    const para = document.createElement("p"); //p tag created
-    para.innerText = item.toUpperCase(); //dynamic name
-    categoryDiv.appendChild(para); //sub-child 2 appended
-    wrapperDiv.appendChild(categoryDiv); //child 1 appended
-
-    const expenseLi = document.createElement("div"); //child 2
-    expenseLi.className = "listdiv";
-    const list = document.createElement("select");
-    list.className = "list";
-
-    const count = getExpense();
-    //static option
-    const listItem = document.createElement("option");
-    listItem.innerText = "Category Expenses";
-    listItem.id = "all-categories ";
-    list.appendChild(listItem);
-
-    //dynamic list option
-    for (let i = 0; i < count.length; i++) {
-      if (count[i].category == item) {
-        const listItem = document.createElement("option");
-        listItem.innerText = count[i].title;
-        listItem.id = count[i].id;
-        list.appendChild(listItem);
-      }
-    }
-    expenseLi.appendChild(list);
-    wrapperDiv.appendChild(expenseLi);
-
-    const categoryAmtDiv = document.createElement("div"); //child 3
-    categoryAmtDiv.className = "category-amount";
-
-    const expenseDetails = document.createElement("div"); //sub-child 1
-    expenseDetails.className = "exp-dt";
-    const amtPara = document.createElement("p");
-    amtPara.className = "exp amount";
-    amtPara.innerText = `₹ ${finalAmt}`;
-    amtPara.id = item; //dynamic id
-    expenseDetails.appendChild(amtPara);
-    const span = document.createElement("span");
-    span.className = "d-t";
-    span.id = `${item}-time`;
-    span.innerText = time;
-    expenseDetails.appendChild(span);
-    categoryAmtDiv.appendChild(expenseDetails); // sub child 1 appended
-
-    const edit = document.createElement("button"); //sub child 2 created
-    edit.className = "editExp";
-    edit.id = edit;
-    const img = document.createElement("img");
-    img.src = "./assets/edit.png";
-    edit.appendChild(img);
-    categoryAmtDiv.appendChild(edit); //sub child 2 appended
-
-    const deleteDiv = document.createElement("div"); //sub child 3 created
-    deleteDiv.className = "delete";
-    const deleteButton = document.createElement("button");
-    deleteButton.className = "delete-btn";
-    deleteButton.type = "button";
-    const buttonImg = document.createElement("img");
-    buttonImg.className = "delete-img";
-    buttonImg.src = "./assets/delete.png";
-    deleteButton.appendChild(buttonImg);
-    deleteDiv.appendChild(deleteButton);
-
-    categoryAmtDiv.appendChild(deleteDiv); //sub-child 3 appended
-    wrapperDiv.appendChild(categoryAmtDiv); // child 2 appended
-
-    disWrapper.appendChild(wrapperDiv); //appended to a common wrapper
+    const card = createCategoryCard(item, finalAmt, time);
+    disWrapper.appendChild(card);
   });
 }
 
-renderCategoryDis();
+renderCatCard();
 
 //event on list in individual expense
 
@@ -376,32 +390,36 @@ disWrapper.addEventListener("click", (e) => {
     return;
   }
 
-  let currentCard = editbtn.closest(".exp-dis");
-
-  const expItem = currentCard.querySelector(".list");
-
-  const item = getExpense().find(
-    (item) => item.id == expItem.selectedOptions[0].id,
-  );
-  editId = item.id;
-  const card = renderEdit(item.title, item.expense);
-
-  if (card) {
-    currentCard.after(card);
-  }
-});
-
-//Render edit card
-
-function renderEdit(title, amount) {
   const isExisted = document.querySelector(".edit-wrapper");
   if (isExisted) {
     alert("Kindly save existing edit");
     return;
   }
 
-  const wrapper = document.createElement("div"); //parent
-  wrapper.className = "edit-wrapper";
+  let currentCard = editbtn.closest(".exp-dis");
+
+  const expItem = currentCard.querySelector(".list");
+  if (expItem.selectedOptions[0].id === "all-categories") {
+    alert("You can't update entire category. Kindly select an expense.");
+    return;
+  }
+
+  const item = getExpense().find(
+    (item) => item.id == expItem.selectedOptions[0].id,
+  );
+  editId = item.id;
+  const card = createEditCard(item.title, item.expense);
+
+  if (card) {
+    currentCard.after(card);
+  }
+});
+
+//Create edit card
+
+function createEditCard(title, amount) {
+  const editWrapper = document.createElement("div"); //parent
+  editWrapper.className = "edit-wrapper";
 
   const editdiv = document.createElement("div"); //child 1
   editdiv.className = "edit-amt-name";
@@ -433,60 +451,64 @@ function renderEdit(title, amount) {
   editAmtDiv.appendChild(editAmt);
   editdiv.appendChild(editAmtDiv);
 
-  wrapper.appendChild(editdiv);
+  editWrapper.appendChild(editdiv);
 
   const cnfDiv = document.createElement("div"); //child 2
   cnfDiv.className = "confirm-edit";
-  const cnfBtn = document.createElement("button"); //sub child 1
-  cnfBtn.className = "edit-btn";
-  cnfBtn.type = "button";
-  cnfBtn.id = "save-btn";
-  cnfBtn.addEventListener("click", () => {
-    saveEdit(editTitle, editAmt);
-  });
+  const saveBtn = document.createElement("button"); //sub child 1
+  saveBtn.className = "save";
+  saveBtn.type = "button";
+  saveBtn.id = "save-btn";
+  editCardEvent(saveBtn, editTitle, editAmt);
+
   const img = document.createElement("img");
   img.className = "edit-save-icon";
   img.src = "./assets/save.png";
   img.alt = "save Butoon";
-  cnfBtn.appendChild(img);
-  cnfDiv.appendChild(cnfBtn);
+  saveBtn.appendChild(img);
+  cnfDiv.appendChild(saveBtn);
 
-  wrapper.appendChild(cnfDiv);
+  editWrapper.appendChild(cnfDiv);
 
-  return wrapper;
+  return editWrapper;
+}
+
+//Event on save button
+function editCardEvent(saveBtn, editTitle, editAmt) {
+  saveBtn.addEventListener("click", () => {
+    const latestTitle = editTitle.value;
+    const latestAmount = Number(editAmt.value);
+    saveEdit(latestTitle, latestAmount);
+  });
 }
 
 //function on save button
 
-function saveEdit(editTitle, editAmt) {
-  if (
-    editTitle.value.trim() === "" ||
-    !Number.isFinite(Number(editAmt.value)) ||
-    Number(editAmt.value) <= 0
-  ) {
-    return;
-  }
-
+function saveEdit(title, amount) {
   if (editId === null) {
     return;
   }
 
+  if (title.trim() === "" || !Number.isFinite(amount) || amount <= 0) {
+    return;
+  }
+
   const confirmation = confirm("Do you want to save changes");
+
   if (confirmation) {
     const updatedList = getExpense();
     updatedList.forEach((element) => {
-      if (element.id == editId) {
-        element.title = editTitle.value;
-        element.expense = Number(editAmt.value);
+      if (element.id === editId) {
+        element.title = title;
+        element.expense = amount;
       }
     });
-    localStorage.setItem("expense", JSON.stringify(updatedList)); //item updated
-    editAmt.value = "";
-    editTitle.value = "";
+
+    setLocal("expense", updatedList);
     editId = null;
     totalExpdis();
     monthTExp();
-    renderCategoryDis();
+    renderCatCard();
     renderTotChart("bar"); //Total expense chart rendered
   }
 }
@@ -505,7 +527,7 @@ disWrapper.addEventListener("click", (e) => {
     let amount = e.target.closest(".category-amount").querySelector(".exp");
     let id = amount.getAttribute("id");
     let updatedArr = getExpense().filter((item) => item.category !== id);
-    localStorage.setItem("expense", JSON.stringify(updatedArr));
+    setLocal("expense", updatedArr);
 
     //Update amount displayed
 
@@ -513,7 +535,7 @@ disWrapper.addEventListener("click", (e) => {
     totalEntries();
     monthTExp();
     renderCategories(categoryFilt, true);
-    renderCategoryDis();
+    renderCatCard();
     renderTotChart("bar");
   }
 });

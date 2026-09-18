@@ -560,14 +560,14 @@ canvas {
   caret-color: var(--caret-color);
 }
 
-.edit-btn {
+.save {
   background-color: transparent;
   border: none;
   cursor: pointer;
   transition: 100ms ease-in-out;
 }
 
-.edit-btn img {
+.save img {
   width: 4.5rem;
 }
 
