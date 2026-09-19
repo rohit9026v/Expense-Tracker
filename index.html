@@ -82,7 +82,7 @@
           </div>
           <form>
             <div class="user-inputs">
-              <label for="inp-title"></label>
+              <!-- <label for="inp-title"></label> -->
               <input
                 type="text"
                 name="title"
@@ -90,7 +90,8 @@
                 class="input"
                 placeholder="Enter title(e.g. food)"
               />
-              <label for="inp-amount"></label>
+
+              <!-- <label for="inp-amount"></label> -->
               <input
                 type="number"
                 name="amount"
@@ -99,6 +100,14 @@
                 placeholder="Amount (₹)"
                 min="1"
               />
+
+              <select name="category" id="inp-type" class="inp-category">
+                <option value="cash">Cash</option>
+                <option value="upi">UPI</option>
+                <option value="bank">Bank</option>
+                <option value="credit-card">Credit Card</option>
+              </select>
+
               <select name="category" id="inp-category" class="inp-category">
                 <option value="food">Food</option>
                 <option value="travel">Travel</option>
@@ -109,6 +118,16 @@
                 <option value="family">Family</option>
                 <option value="misc-expense">Misc. Expense</option>
               </select>
+
+              <label for="inp-amount"></label>
+              <input
+                type="text"
+                name="comment"
+                id="inp-comment"
+                class="input"
+                placeholder="Comment if any"
+              />
+
               <button type="submit" id="add-btn" class="add-btn">
                 Add Expense
               </button>

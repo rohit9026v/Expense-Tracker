@@ -132,10 +132,6 @@ h1 {
   width: 80%;
 }
 
-.dark:active,
-.profile:active {
-  scale: 95%;
-}
 
 .profile {
   height: 4rem;
@@ -179,10 +175,6 @@ h1 {
   transition: 100ms ease-in-out;
 }
 
-.exportBtn:active {
-  scale: 95%;
-}
-
 .exportBtn img {
   width: 4rem;
 }
@@ -222,7 +214,7 @@ h2 {
   border-radius: 8px;
   width: 100%;
   justify-content: space-evenly;
-  padding: 1rem 2rem;
+  padding: 2rem 2rem;
   gap: 1rem;
   background-color: var(--card-color);
   color: var(--text-color);
@@ -230,8 +222,10 @@ h2 {
 
 .user-inputs {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  row-gap: 2rem;
 }
 
 .input {
@@ -282,11 +276,6 @@ h2 {
 .add-btn:hover,
 .flt-btn:hover {
   box-shadow: 0 0 15px 3px var(--shadow-color);
-}
-
-.add-btn:active,
-.flt-btn:active {
-  scale: 95%;
 }
 
 .flt-btn {
@@ -524,7 +513,15 @@ canvas {
 }
 
 .delete-btn:active,
-.editExp:active {
+.editExp:active,
+.saveedit-btn:active,
+.canceledit-btn:active,
+.deledit-btn:active,
+.dark:active,
+.profile:active,
+.exportBtn:active,
+.add-btn:active,
+.flt-btn:active {
   scale: 95%;
 }
 
@@ -552,7 +549,7 @@ canvas {
 
 .edit-inp {
   width: 30rem;
-  height: 3rem;
+  height: 4rem;
   border: 0.5px solid var(--border-color);
   border-radius: 8px;
   margin-left: 2rem;
@@ -562,21 +559,23 @@ canvas {
   caret-color: var(--caret-color);
 }
 
-.save {
+.saveedit-btn,
+.canceledit-btn,
+.deledit-btn {
   background-color: transparent;
   border: none;
   cursor: pointer;
   transition: 100ms ease-in-out;
 }
 
-.save img {
-  width: 4.5rem;
-}
-
-.confirm-edit {
+.edit-options {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: 3rem;
+}
+
+.edit-icons {
+  width: 4.5rem;
 }
 
 .footer {

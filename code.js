@@ -9,6 +9,8 @@ const tEntries = document.querySelector(".tentries");
 const tMonth = document.querySelector(".tmonth");
 const categoryFilt = document.querySelector("#fil-category");
 const disWrapper = document.querySelector(".dis-wrapper");
+const inpPaymentType = document.querySelector("#inp-type");
+const inpComment = document.querySelector("#inp-comment");
 
 //date and time Updation
 
@@ -21,7 +23,6 @@ function getExpense() {
   return JSON.parse(localStorage.getItem("expense")) || [];
 }
 let expenseArr = getExpense();
-
 //Setting data to Local STorage...
 
 function setLocal(name, arr) {
@@ -30,7 +31,7 @@ function setLocal(name, arr) {
 
 //Fn for updating UI
 
-function updateUI(){
+function updateUI() {
   totalExpdis();
   totalEntries();
   monthTExp();
@@ -82,10 +83,12 @@ printBtn.addEventListener("click", () => {
 const addSec = document.querySelector("#add-sec");
 
 addButton.addEventListener("click", () => {
-  let title = inpTitle.value.trim();
-  let expense = Number(inpAmount.value);
-  let category = inpCategory.value;
-  let time = new Date().toLocaleString();
+  const title = inpTitle.value.trim();
+  const expense = Number(inpAmount.value);
+  const category = inpCategory.value;
+  const time = new Date().toLocaleString();
+  const comment = inpComment.value;
+  const paymentType = inpPaymentType.value;
 
   if (title === "") {
     alert("Please fill all fields");
@@ -98,15 +101,17 @@ addButton.addEventListener("click", () => {
   }
 
   expenseArr.push({
+    id: Date.now(),
     category,
     title,
     expense,
+    paymentType,
     time,
-    id: Date.now(),
+    comment,
   });
 
   setLocal("expense", expenseArr);
-  updateUI()
+  updateUI();
   floatingBtn.classList.remove("hidden"); //floating button visible
   addSec.classList.add("hidden"); //add sec hide
   inpAmount.value = ""; //amount feild set to empty
@@ -428,7 +433,7 @@ function createEditCard(title, amount) {
   editTitleDiv.className = "edit-title-group";
   const spanT = document.createElement("span");
   spanT.className = "edit-label";
-  spanT.innerText = "Edit Title";
+  spanT.innerText = "Edit Title:";
   const editTitle = document.createElement("input");
   editTitle.className = "edit-inp";
   editTitle.id = "edit-title";
@@ -441,7 +446,7 @@ function createEditCard(title, amount) {
   const editAmtDiv = document.createElement("div"); //sub child 2
   editAmtDiv.className = "edit-amount-group";
   const spanA = document.createElement("span");
-  spanA.innerText = "Edit Amount";
+  spanA.innerText = "Edit Amount:";
   const editAmt = document.createElement("input");
   editAmt.className = "edit-inp";
   editAmt.id = "edit-amount";
@@ -453,22 +458,47 @@ function createEditCard(title, amount) {
 
   editWrapper.appendChild(editdiv);
 
-  const cnfDiv = document.createElement("div"); //child 2
-  cnfDiv.className = "confirm-edit";
+  const optionsDiv = document.createElement("div"); //child 2
+  optionsDiv.className = "edit-options";
+
   const saveBtn = document.createElement("button"); //sub child 1
-  saveBtn.className = "save";
+  saveBtn.className = "saveedit-btn";
   saveBtn.type = "button";
   saveBtn.id = "save-btn";
   editCardEvent(saveBtn, editTitle, editAmt);
 
-  const img = document.createElement("img");
-  img.className = "edit-save-icon";
-  img.src = "./assets/save.png";
-  img.alt = "save Butoon";
-  saveBtn.appendChild(img);
-  cnfDiv.appendChild(saveBtn);
+  const SaveImg = document.createElement("img");
+  SaveImg.className = "edit-icons";
+  SaveImg.src = "./assets/save.png";
+  SaveImg.alt = "save Butoon";
+  saveBtn.appendChild(SaveImg);
+  optionsDiv.appendChild(saveBtn);
 
-  editWrapper.appendChild(cnfDiv);
+  const cancelBtn = document.createElement("button");
+  cancelBtn.id = "cancelEdit";
+  cancelBtn.className = "canceledit-btn";
+  cancelBtn.type = "button";
+
+  const cancelImg = document.createElement("img");
+  cancelImg.className = "edit-icons";
+  cancelImg.src = "./assets/cancel.png";
+  cancelImg.alt = "save Butoon";
+  cancelBtn.appendChild(cancelImg);
+  optionsDiv.appendChild(cancelBtn);
+
+  const delBtn = document.createElement("button");
+  delBtn.id = "delEdit";
+  delBtn.className = "deledit-btn";
+  delBtn.type = "button";
+
+  const delImg = document.createElement("img");
+  delImg.className = "edit-icons";
+  delImg.src = "./assets/delete.png";
+  delImg.alt = "delete icon";
+  delBtn.appendChild(delImg);
+  optionsDiv.appendChild(delBtn);
+
+  editWrapper.appendChild(optionsDiv);
 
   return editWrapper;
 }
@@ -505,7 +535,7 @@ function saveEdit(title, amount) {
 
     setLocal("expense", expenseArr);
     editId = null;
-    updateUI()
+    updateUI();
   }
 }
 
