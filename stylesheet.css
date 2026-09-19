@@ -132,7 +132,6 @@ h1 {
   width: 80%;
 }
 
-
 .profile {
   height: 4rem;
   width: 4rem;
@@ -460,6 +459,23 @@ canvas {
   font-weight: 500;
   color: var(--input-color);
   background-color: var(--input-bg-color);
+}
+
+.viewWrapper {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  padding: 2rem 4rem;
+}
+
+.table-heads {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 2rem 4rem;
 }
 
 .category-amount {

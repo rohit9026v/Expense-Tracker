@@ -346,7 +346,7 @@ function renderOptCategory(appendto, category) {
   }
 }
 
-//dynamic category Card display
+//dynamic category Card rendered
 
 function renderCatCard() {
   disWrapper.innerHTML = "";
@@ -385,6 +385,52 @@ disWrapper.addEventListener("change", (e) => {
   amt.innerText = `₹ ${exp.expense}`;
   time.innerText = exp.time;
 });
+
+//Event on view All button
+
+//View all card created
+
+function createViewAllCard() {
+  const wrapperDiv = document.createElement("div"); //parent
+  wrapperDiv.className = "viewWrapper";
+
+  const head = document.createElement("h2"); //Child 1
+  head.innerText = "Expense display";
+  wrapperDiv.appendChild(head);
+
+  const tableHeads = document.createElement("div"); //child 2
+  tableHeads.className = "table-heads";
+
+  const category = document.createElement("h2"); //sub-child 1
+  category.innerText = "Category";
+  tableHeads.appendChild(category);
+
+  const title = document.createElement("h2"); //sub-child 2
+  title.innerText = "Title";
+  tableHeads.appendChild(title);
+
+  const amount = document.createElement("h2"); //sub-child 3
+  amount.innerText = "Amount";
+  tableHeads.appendChild(amount);
+
+  const paymentType = document.createElement("h2"); //sub-child 4
+  paymentType.innerText = "Payment Type";
+  tableHeads.appendChild(paymentType);
+
+  const Date = document.createElement("h2"); //sub-child 5
+  Date.innerText = "Date";
+  tableHeads.appendChild(Date);
+
+  const comment = document.createElement("h2"); //sub-child 6
+  comment.innerText = "comment";
+  tableHeads.appendChild(category);
+
+  wrapperDiv.appendChild(tableHeads);
+
+  disWrapper.appendChild(wrapperDiv);
+}
+
+createViewAllCard();
 
 //event on edit button
 
@@ -478,6 +524,7 @@ function createEditCard(title, amount) {
   cancelBtn.id = "cancelEdit";
   cancelBtn.className = "canceledit-btn";
   cancelBtn.type = "button";
+  attachCancelEvnt(editWrapper, cancelBtn);
 
   const cancelImg = document.createElement("img");
   cancelImg.className = "edit-icons";
@@ -509,6 +556,16 @@ function editCardEvent(saveBtn, editTitle, editAmt) {
     const latestTitle = editTitle.value;
     const latestAmount = Number(editAmt.value);
     saveEdit(latestTitle, latestAmount);
+  });
+}
+
+//Event on cancel button
+
+function attachCancelEvnt(editWrapper, cancelBtn) {
+  cancelBtn.addEventListener("click", () => {
+    if (editWrapper) {
+      editWrapper.remove();
+    }
   });
 }
 
