@@ -629,7 +629,8 @@ canvas {
 .flt-btn:active,
 .view-btn:active,
 .viewallbtn:active,
-.viewall-btn:active {
+.viewall-btn:active,
+.footer-btn:active {
   scale: 95%;
 }
 
@@ -686,9 +687,73 @@ canvas {
   width: 4.5rem;
 }
 
-.footer {
-  margin: 1rem 0;
+.footerwrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5rem;
+  color: var(--text-color);
+  border-top: 2px solid var(--border-color);
+  margin: 2rem 1vw 1rem 1vw;
+  padding: 2rem 4rem 0 4rem;
+}
+
+.footer-social {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-logo {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-logo img {
+  width: 4rem;
+}
+
+.footer-social h2 {
   font-size: 2.5rem;
+}
+
+.footer-taglines h3 {
+  font-size: 2rem;
+}
+
+.footer-taglines p {
+  font-size: 1.5rem;
+}
+
+.footer-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.footer-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  outline: none;
+  border: none;
+  object-fit: contain;
+  transition: 100ms;
+  overflow: hidden;
+}
+
+.footer-btn img {
+  width: 3.5rem;
+}
+
+.footer-rights {
+  font-size: 1.5rem;
+}
+
+.footer {
+  font-size: 2rem;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -697,7 +762,7 @@ canvas {
 }
 
 .ft-img {
-  height: 4rem;
+  height: 3rem;
 }
 
 /* Responsive Section */
