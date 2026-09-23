@@ -276,10 +276,17 @@ function createCategoryCard(category, amt, time) {
 
   const expenseLi = document.createElement("div"); //child 2
   expenseLi.className = "listdiv";
-  const list = document.createElement("select");
+  const list = document.createElement("select"); //sub child 1
   list.className = "list";
   renderOptCategory(list, category);
   expenseLi.appendChild(list);
+
+  const viewBtn = document.createElement("button"); //sub child 2
+  viewBtn.className = "view-btn";
+  const viewImg = document.createElement("img");
+  viewImg.src = "./assets/view.png";
+  viewBtn.appendChild(viewImg);
+  expenseLi.appendChild(viewBtn);
   wrapperDiv.appendChild(expenseLi);
 
   const categoryAmtDiv = document.createElement("div"); //child 3
@@ -317,7 +324,6 @@ function createCategoryCard(category, amt, time) {
   buttonImg.src = "./assets/delete.png";
   deleteButton.appendChild(buttonImg);
   deleteDiv.appendChild(deleteButton);
-
   categoryAmtDiv.appendChild(deleteDiv); //sub-child 3 appended
   wrapperDiv.appendChild(categoryAmtDiv); // child 2 appended
 
@@ -386,51 +392,168 @@ disWrapper.addEventListener("change", (e) => {
   time.innerText = exp.time;
 });
 
-//Event on view All button
+//Event on view All button in edit card
+
+disWrapper.addEventListener("click", (e) => {
+  const viewBtn = e.target.closest(".view-btn");
+  if (!viewBtn) {
+    return;
+  }
+
+  const isExisted = document.querySelector(".viewallWrapper");
+  if (isExisted) {
+    alert("Kindly close the existing view");
+    return;
+  }
+
+  const currentCard = viewBtn.closest(".exp-dis");
+  const list = currentCard.querySelector(".list");
+  const card = createViewAllCard(list);
+
+  if (card) {
+    currentCard.after(card);
+  }
+});
 
 //View all card created
 
-function createViewAllCard() {
+function createViewAllCard(list) {
   const wrapperDiv = document.createElement("div"); //parent
-  wrapperDiv.className = "viewWrapper";
+  wrapperDiv.className = "viewallWrapper";
 
-  const head = document.createElement("h2"); //Child 1
+  const headDiv = document.createElement("div"); //Child 1
+  headDiv.className = "head-div";
+
+  const head = document.createElement("h2"); //sub-child 1
   head.innerText = "Expense display";
-  wrapperDiv.appendChild(head);
+  headDiv.appendChild(head);
 
-  const tableHeads = document.createElement("div"); //child 2
-  tableHeads.className = "table-heads";
+  const toolDiv = document.createElement("div"); //sub-child 2
+  toolDiv.className = "viewall-toolDiv";
 
-  const category = document.createElement("h2"); //sub-child 1
-  category.innerText = "Category";
-  tableHeads.appendChild(category);
+  const printBtn = document.createElement("button");
+  printBtn.type = "button";
+  printBtn.className = "viewall-btn";
+  const printImg = document.createElement("img");
+  printImg.src = "./assets/print.png";
+  printBtn.appendChild(printImg);
+  toolDiv.appendChild(printBtn);
 
-  const title = document.createElement("h2"); //sub-child 2
-  title.innerText = "Title";
-  tableHeads.appendChild(title);
+  const closeBtn = document.createElement("button");
+  closeBtn.type = "button";
+  closeBtn.className = "viewall-btn";
+  const closeImg = document.createElement("img");
+  closeImg.src = "./assets/close-view.png";
+  closeBtn.appendChild(closeImg);
+  toolDiv.appendChild(closeBtn);
 
-  const amount = document.createElement("h2"); //sub-child 3
-  amount.innerText = "Amount";
-  tableHeads.appendChild(amount);
+  headDiv.appendChild(toolDiv);
 
-  const paymentType = document.createElement("h2"); //sub-child 4
-  paymentType.innerText = "Payment Type";
-  tableHeads.appendChild(paymentType);
+  wrapperDiv.appendChild(headDiv);
 
-  const Date = document.createElement("h2"); //sub-child 5
-  Date.innerText = "Date";
-  tableHeads.appendChild(Date);
+  //table
 
-  const comment = document.createElement("h2"); //sub-child 6
-  comment.innerText = "comment";
-  tableHeads.appendChild(category);
+  const table = document.createElement("table");
 
-  wrapperDiv.appendChild(tableHeads);
+  //table head
 
-  disWrapper.appendChild(wrapperDiv);
+  const thead = document.createElement("thead");
+  const tr = document.createElement("tr");
+
+  const catTh = document.createElement("th");
+  catTh.innerText = "Category";
+  tr.appendChild(catTh);
+
+  const titleTh = document.createElement("th");
+  titleTh.innerText = "Title";
+  tr.appendChild(titleTh);
+
+  const amountTh = document.createElement("th");
+  amountTh.innerText = "Amount";
+  tr.appendChild(amountTh);
+
+  const paymentTh = document.createElement("th");
+  paymentTh.innerText = "Paid with";
+  tr.appendChild(paymentTh);
+
+  const dateTh = document.createElement("th");
+  dateTh.innerText = "Date & Time";
+  tr.appendChild(dateTh);
+
+  const commentTh = document.createElement("th");
+  commentTh.innerText = "comment";
+  tr.appendChild(commentTh);
+
+  const actionTh = document.createElement("th");
+  actionTh.innerText = "Actions";
+  tr.appendChild(actionTh);
+
+  thead.appendChild(tr);
+  table.appendChild(thead);
+
+  //table body
+
+  const tbody = document.createElement("tbody");
+
+  const filteredArr = expenseArr.filter((item) => {
+    return item.id == Number(list.selectedOptions[0].id);
+  });
+
+  filteredArr.forEach((item) => {
+    const bodytr = document.createElement("tr");
+
+    const catTd = document.createElement("td");
+    catTd.innerText = item.category;
+    bodytr.appendChild(catTd);
+
+    const titleTd = document.createElement("td");
+    titleTd.innerText = item.title;
+    bodytr.appendChild(titleTd);
+
+    const amountTd = document.createElement("td");
+    amountTd.innerText = item.expense;
+    bodytr.appendChild(amountTd);
+
+    const paidWithTd = document.createElement("td");
+    paidWithTd.innerText = item.paymentType;
+    bodytr.appendChild(paidWithTd);
+
+    const dateTd = document.createElement("td");
+    dateTd.innerText = item.time;
+    bodytr.appendChild(dateTd);
+
+    const commentTd = document.createElement("td");
+    commentTd.innerText = item.comment;
+    bodytr.appendChild(commentTd);
+
+    const actionTd = document.createElement("td");
+    actionTd.className = "actioncell";
+    const editBtn = document.createElement("button");
+    editBtn.classList = "viewallbtn";
+    editBtn.id = "viewalleditbtn";
+    const editImg = document.createElement("img");
+    editImg.src = "./assets/edit.png";
+    editBtn.appendChild(editImg);
+    actionTd.appendChild(editBtn);
+
+    const delBtn = document.createElement("button");
+    delBtn.classList = "viewallbtn";
+    delBtn.id = "viewalleditbtn";
+    const delImg = document.createElement("img");
+    delImg.src = "./assets/delete.png";
+    delBtn.appendChild(delImg);
+    actionTd.appendChild(delBtn);
+
+    bodytr.appendChild(actionTd);
+
+    tbody.appendChild(bodytr);
+    table.appendChild(tbody);
+
+    wrapperDiv.appendChild(table);
+  });
+
+  return wrapperDiv;
 }
-
-createViewAllCard();
 
 //event on edit button
 

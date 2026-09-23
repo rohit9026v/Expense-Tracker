@@ -49,7 +49,6 @@ html {
   --bg-color: #0b0d16;
   --card-color: #151824;
   --text-color: #e8eaf2;
-  /* --text-color: #b8bccb; */
   --input-color: #white;
   --input-bg-color: #202437;
   --border-color: #34394d;
@@ -85,7 +84,7 @@ body {
   gap: 1rem;
 }
 
-h1 {
+.head-sec h1 {
   font-size: 2.5rem;
   font-weight: 600;
 }
@@ -256,7 +255,8 @@ h2 {
 .fil-category:focus,
 .list:focus,
 .chart-select:focus,
-.edit-inp:focus {
+.edit-inp:focus,
+.search:focus {
   outline: none;
   border-color: var(--button-color);
   box-shadow: 0 0 15px var(--shadow-color);
@@ -400,7 +400,8 @@ canvas {
   font-weight: 400;
 }
 
-.fil-category {
+.fil-category,
+.search {
   height: 3rem;
   width: 30rem;
   border-radius: 5px;
@@ -410,6 +411,11 @@ canvas {
   margin-left: 2rem;
   color: var(--input-color);
   background-color: var(--input-bg-color);
+}
+
+.search {
+  width: 32rem;
+  caret-color: var(--caret-color);
 }
 
 .expheads {
@@ -448,6 +454,12 @@ canvas {
   height: 6rem;
 }
 
+.listdiv {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
 .list {
   height: 4rem;
   width: 50rem;
@@ -461,7 +473,19 @@ canvas {
   background-color: var(--input-bg-color);
 }
 
-.viewWrapper {
+.view-btn {
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+  transition: ease-in-out 100ms;
+  object-fit: contain;
+}
+
+.view-btn img {
+  width: 4rem;
+}
+
+.viewallWrapper {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -469,13 +493,78 @@ canvas {
   background-color: var(--primary-color);
   color: var(--text-color);
   padding: 2rem 4rem;
+  row-gap: 4rem;
 }
 
-.table-heads {
+.head-div {
   display: flex;
+  align-items: center;
   justify-content: space-between;
+}
+
+.head-div h2 {
+  font-size: 2.5rem;
+}
+
+.viewall-toolDiv {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.viewall-btn {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.viewall-btn img {
+  width: 4.5rem;
+}
+
+.viewallWrapper table {
   width: 100%;
-  padding: 2rem 4rem;
+  border-collapse: separate;
+}
+
+.viewallWrapper td {
+  padding: 1.2rem 1.6rem;
+}
+
+.viewallWrapper th {
+  font-size: 2rem;
+  text-align: center;
+  padding: 1rem 2rem;
+}
+
+.viewallWrapper tbody td {
+  font-size: 1.5rem;
+}
+
+.actioncell {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.viewallbtn {
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
+}
+
+.viewallbtn img {
+  width: 3.5rem;
+}
+
+/* To be removed after table testing */
+.allWrapper table,
+.viewallWrapper th,
+.viewallWrapper td {
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 .category-amount {
@@ -537,7 +626,10 @@ canvas {
 .profile:active,
 .exportBtn:active,
 .add-btn:active,
-.flt-btn:active {
+.flt-btn:active,
+.view-btn:active,
+.viewallbtn:active,
+.viewall-btn:active {
   scale: 95%;
 }
 
