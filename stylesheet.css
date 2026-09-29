@@ -513,14 +513,14 @@ canvas {
   justify-content: center;
 }
 
-.viewall-btn {
+.viewall-action-btn {
   outline: none;
   border: none;
   background-color: transparent;
   cursor: pointer;
 }
 
-.viewall-btn img {
+.viewall-action-btn img {
   width: 4.5rem;
 }
 
@@ -549,14 +549,14 @@ canvas {
   justify-content: space-evenly;
 }
 
-.viewallbtn {
+.viewall-btn {
   background-color: transparent;
   outline: none;
   border: none;
   cursor: pointer;
 }
 
-.viewallbtn img {
+.viewall-btn img {
   width: 3.5rem;
 }
 
@@ -628,8 +628,8 @@ canvas {
 .add-btn:active,
 .flt-btn:active,
 .view-btn:active,
-.viewallbtn:active,
 .viewall-btn:active,
+.viewall-action-btn:active,
 .footer-btn:active {
   scale: 95%;
 }
@@ -717,11 +717,11 @@ canvas {
 }
 
 .footer-taglines h3 {
-  font-size: 2rem;
+  font-size: 1.7rem;
 }
 
 .footer-taglines p {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
 }
 
 .footer-links {

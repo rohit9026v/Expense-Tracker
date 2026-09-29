@@ -283,6 +283,7 @@ function createCategoryCard(category, amt, time) {
 
   const viewBtn = document.createElement("button"); //sub child 2
   viewBtn.className = "view-btn";
+  viewBtn.id = "viewbtn";
   const viewImg = document.createElement("img");
   viewImg.src = "./assets/view.png";
   viewBtn.appendChild(viewImg);
@@ -334,11 +335,12 @@ function createCategoryCard(category, amt, time) {
 
 function renderOptCategory(appendto, category) {
   const count = expenseArr;
-
   //static option
   const option = document.createElement("option");
   option.innerText = "Category Expenses";
-  option.id = "all-categories";
+  option.className = category;
+  option.dataset.category = category;
+  option.id = category;
   appendto.appendChild(option);
 
   //dynamic list option
@@ -392,32 +394,21 @@ disWrapper.addEventListener("change", (e) => {
   time.innerText = exp.time;
 });
 
-//Event on view All button in edit card
+//Event on view All button in category card
 
 disWrapper.addEventListener("click", (e) => {
-  const viewBtn = e.target.closest(".view-btn");
+  const viewBtn = e.target.closest("#viewbtn");
+
   if (!viewBtn) {
     return;
   }
 
-  const isExisted = document.querySelector(".viewallWrapper");
-  if (isExisted) {
-    alert("Kindly close the existing view");
-    return;
-  }
-
-  const currentCard = viewBtn.closest(".exp-dis");
-  const list = currentCard.querySelector(".list");
-  const card = createViewAllCard(list);
-
-  if (card) {
-    currentCard.after(card);
-  }
+  renderedViewAllCard(viewBtn);
 });
 
-//View all card created
+//View-all card created
 
-function createViewAllCard(list) {
+function createViewAllCard(filteredArr) {
   const wrapperDiv = document.createElement("div"); //parent
   wrapperDiv.className = "viewallWrapper";
 
@@ -434,6 +425,7 @@ function createViewAllCard(list) {
   const printBtn = document.createElement("button");
   printBtn.type = "button";
   printBtn.className = "viewall-btn";
+  printBtn.id = "viewall-printbtn";
   const printImg = document.createElement("img");
   printImg.src = "./assets/print.png";
   printBtn.appendChild(printImg);
@@ -442,6 +434,7 @@ function createViewAllCard(list) {
   const closeBtn = document.createElement("button");
   closeBtn.type = "button";
   closeBtn.className = "viewall-btn";
+  closeBtn.id = "viewall-closebtn";
   const closeImg = document.createElement("img");
   closeImg.src = "./assets/close-view.png";
   closeBtn.appendChild(closeImg);
@@ -495,10 +488,6 @@ function createViewAllCard(list) {
 
   const tbody = document.createElement("tbody");
 
-  const filteredArr = expenseArr.filter((item) => {
-    return item.id == Number(list.selectedOptions[0].id);
-  });
-
   filteredArr.forEach((item) => {
     const bodytr = document.createElement("tr");
 
@@ -529,16 +518,16 @@ function createViewAllCard(list) {
     const actionTd = document.createElement("td");
     actionTd.className = "actioncell";
     const editBtn = document.createElement("button");
-    editBtn.classList = "viewallbtn";
-    editBtn.id = "viewalleditbtn";
+    editBtn.classList = "viewall-action-btn";
+    editBtn.id = "viewall-edit-btn";
     const editImg = document.createElement("img");
     editImg.src = "./assets/edit.png";
     editBtn.appendChild(editImg);
     actionTd.appendChild(editBtn);
 
     const delBtn = document.createElement("button");
-    delBtn.classList = "viewallbtn";
-    delBtn.id = "viewalleditbtn";
+    delBtn.classList = "viewall-action-btn";
+    delBtn.id = "viewall-del-btn";
     const delImg = document.createElement("img");
     delImg.src = "./assets/delete.png";
     delBtn.appendChild(delImg);
@@ -547,12 +536,85 @@ function createViewAllCard(list) {
     bodytr.appendChild(actionTd);
 
     tbody.appendChild(bodytr);
-    table.appendChild(tbody);
-
-    wrapperDiv.appendChild(table);
   });
-
+  table.appendChild(tbody);
+  attachEventOnTable(table);
+  wrapperDiv.appendChild(table);
+  attachEventOnViewAllCard(wrapperDiv);
   return wrapperDiv;
+}
+
+//view-all card rendered
+
+function renderedViewAllCard(btn) {
+  const currentCard = btn.closest(".exp-dis");
+  const list = currentCard.querySelector(".list");
+  const selected = list.selectedOptions[0];
+  let filteredArr = [];
+
+  const isExisted = document.querySelector(".viewallWrapper");
+  if (isExisted) {
+    alert("One ViewAll card is already opened. Kindly close one");
+    return;
+  }
+
+  btn.style.visibility = "hidden";
+
+  if (selected.dataset.category) {
+    filteredArr = expenseArr.filter((item) => {
+      return item.category === selected.dataset.category;
+    });
+  } else {
+    filteredArr = expenseArr.filter((item) => {
+      return item.id === Number(selected.id);
+    });
+  }
+
+  const card = createViewAllCard(filteredArr);
+
+  if (card) {
+    currentCard.after(card);
+  }
+}
+
+//event on button in view all card
+
+function attachEventOnViewAllCard(wrapper) {
+  wrapper.addEventListener("click", (e) => {
+    const closeBtn = e.target.closest("#viewall-closebtn");
+    const printBtn = e.target.closest("#viewall-printbtn");
+    const viewBtn = wrapper.previousElementSibling.querySelector("#viewbtn");
+
+    if (!closeBtn && !printBtn) {
+      return;
+    }
+
+    if (printBtn) {
+      window.print();
+    } else if (closeBtn) {
+      viewBtn.style.visibility = "visible";
+      wrapper.remove();
+    }
+  });
+}
+
+//event on table action buttons in viewAll Card
+
+function attachEventOnTable(table) {
+  table.addEventListener("click", (e) => {
+    const editBtn = e.target.closest("#viewall-edit-btn");
+    const delBtn = e.target.closest("#viewall-del-btn");
+
+    if (!editBtn && !delBtn) {
+      return;
+    }
+
+    if (editBtn) {
+      console.log(" edit button is clicked");
+    } else if (delBtn) {
+      console.log("del button is clicked");
+    }
+  });
 }
 
 //event on edit button
