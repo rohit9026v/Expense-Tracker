@@ -497,10 +497,12 @@ function createViewAllCard(filteredArr) {
 
     const titleTd = document.createElement("td");
     titleTd.innerText = item.title;
+    titleTd.dataset.feild = "title";
     bodytr.appendChild(titleTd);
 
     const amountTd = document.createElement("td");
     amountTd.innerText = item.expense;
+    amountTd.dataset.feild = "amount";
     bodytr.appendChild(amountTd);
 
     const paidWithTd = document.createElement("td");
@@ -619,11 +621,21 @@ function attachEventOnTable(table) {
 }
 
 //Edit function in view all table
-
+let editId = null;
 function editExpRow(editBtn) {
   const row = editBtn.closest("tr");
-  const id = row.dataset.id;
-  createEditCard();
+  const amountCell = row.querySelector("[data-feild='amount']");
+  const titleCell = row.querySelector("[data-feild='title']");
+  const id = Number(row.dataset.id);
+  editId = id;
+  let currentCard = editBtn.closest(".viewallWrapper");
+  const card = createEditCard(
+    titleCell.textContent,
+    Number(amountCell.textContent),
+  );
+  if (card) {
+    currentCard.after(card);
+  }
 }
 
 //Delete function in view all table
@@ -640,7 +652,6 @@ function deleteExpRow(delBtn) {
 
 //event on edit button
 
-let editId = null;
 disWrapper.addEventListener("click", (e) => {
   const editbtn = e.target.closest(".editExp");
   if (!editbtn) {
@@ -664,6 +675,7 @@ disWrapper.addEventListener("click", (e) => {
   const item = expenseArr.find(
     (item) => item.id == expItem.selectedOptions[0].id,
   );
+
   editId = item.id;
   const card = createEditCard(item.title, item.expense);
 
@@ -717,7 +729,7 @@ function createEditCard(title, amount) {
   saveBtn.className = "saveedit-btn";
   saveBtn.type = "button";
   saveBtn.id = "save-btn";
-  editCardEvent(saveBtn, editTitle, editAmt);
+  attachSaveEvnt(saveBtn, editTitle, editAmt);
 
   const SaveImg = document.createElement("img");
   SaveImg.className = "edit-icons";
@@ -756,8 +768,9 @@ function createEditCard(title, amount) {
   return editWrapper;
 }
 
-//Event on save button
-function editCardEvent(saveBtn, editTitle, editAmt) {
+//Event on save button in Edit card
+
+function attachSaveEvnt(saveBtn, editTitle, editAmt) {
   saveBtn.addEventListener("click", () => {
     const latestTitle = editTitle.value;
     const latestAmount = Number(editAmt.value);
@@ -765,7 +778,7 @@ function editCardEvent(saveBtn, editTitle, editAmt) {
   });
 }
 
-//Event on cancel button
+//Event on cancel button in Edit card
 
 function attachCancelEvnt(editWrapper, cancelBtn) {
   cancelBtn.addEventListener("click", () => {
@@ -775,7 +788,7 @@ function attachCancelEvnt(editWrapper, cancelBtn) {
   });
 }
 
-//function on save button
+//function on save button in Edit card
 
 function saveEdit(title, amount) {
   if (editId === null) {
