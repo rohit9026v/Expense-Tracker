@@ -535,6 +535,7 @@ function createViewAllCard(filteredArr) {
 
     bodytr.appendChild(actionTd);
 
+    bodytr.dataset.id = item.id;
     tbody.appendChild(bodytr);
   });
   table.appendChild(tbody);
@@ -610,11 +611,31 @@ function attachEventOnTable(table) {
     }
 
     if (editBtn) {
-      console.log(" edit button is clicked");
+      editExpRow(editBtn);
     } else if (delBtn) {
-      console.log("del button is clicked");
+      deleteExpRow(delBtn);
     }
   });
+}
+
+//Edit function in view all table
+
+function editExpRow(editBtn) {
+  const row = editBtn.closest("tr");
+  const id = row.dataset.id;
+  createEditCard();
+}
+
+//Delete function in view all table
+
+function deleteExpRow(delBtn) {
+  if (confirm("Are you sure! you want to delete this expense?")) {
+    const row = delBtn.closest("tr");
+    const id = Number(row.dataset.id);
+    expenseArr = expenseArr.filter((item) => item.id !== id);
+    setLocal("expense", expenseArr);
+    updateUI();
+  }
 }
 
 //event on edit button
@@ -781,7 +802,7 @@ function saveEdit(title, amount) {
   }
 }
 
-//category wise delete button
+//Event on delete button in category expense card
 
 disWrapper.addEventListener("click", (e) => {
   //click validation
