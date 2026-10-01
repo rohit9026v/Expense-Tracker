@@ -19,10 +19,12 @@ setInterval(() => {
 }, 1000);
 
 //Getting data from Local Storage...
+
 function getExpense() {
   return JSON.parse(localStorage.getItem("expense")) || [];
 }
 let expenseArr = getExpense();
+
 //Setting data to Local STorage...
 
 function setLocal(name, arr) {
@@ -240,10 +242,27 @@ function renderCategories(appendTo, includeAll = false) {
 
 renderCategories(categoryFilt, true);
 
-//applying filter
+//Event on transaction-control section
 
-let category = document.querySelectorAll(".exp-dis");
-categoryFilt.addEventListener("change", () => {
+const controlSec = document.querySelector(".transaction-controls");
+controlSec.addEventListener("change", (e) => {
+  const filter = e.target.closest("#fil-category");
+  const sortBy = e.target.closest("#sort-by");
+
+  if (!sortBy && !filter) {
+    return;
+  }
+
+  if (filter) {
+    changedFilter();
+  } else if (sortBy) {
+    sortBy();
+  }
+});
+
+//function for applying filter
+
+function changedFilter() {
   let category = document.querySelectorAll(".exp-dis");
   category.forEach((element) => {
     element.classList.remove("hidden");
@@ -254,7 +273,17 @@ categoryFilt.addEventListener("change", () => {
       element.classList.add("hidden");
     }
   });
-});
+}
+
+//Event for search
+const search = document.querySelector("#searchExp");
+search.addEventListener("change", (e) => {});
+
+//function for Sort by
+
+function sortBy() {
+  
+}
 
 //Create Category card
 
