@@ -247,16 +247,16 @@ renderCategories(categoryFilt, true);
 const controlSec = document.querySelector(".transaction-controls");
 controlSec.addEventListener("change", (e) => {
   const filter = e.target.closest("#fil-category");
-  const sortBy = e.target.closest("#sort-by");
+  const sortSelect = e.target.closest("#sort-by");
 
-  if (!sortBy && !filter) {
+  if (!sortSelect && !filter) {
     return;
   }
 
   if (filter) {
     changedFilter();
   } else if (sortBy) {
-    sortBy();
+    sortBy(sortSelect);
   }
 });
 
@@ -281,8 +281,84 @@ search.addEventListener("change", (e) => {});
 
 //function for Sort by
 
-function sortBy() {
-  
+function sortBy(sortSelect) {
+  const categoryArr = [...new Set(expenseArr.map((item) => item.category))];
+
+  if (!sortSelect) {
+    sortByDefault(categoryArr);
+    return;
+  }
+
+  switch (sortSelect.selectedOptions[0].value) {
+    case "asc-amount":
+      sortByAscAmount(categoryArr);
+      break;
+    case "dsc-amount":
+      sortByDscAmount(categoryArr);
+      break;
+    case "newest-date":
+      sortByNewDate(categoryArr);
+      break;
+    case "oldest-date":
+      sortByOldDate(categoryArr);
+      break;
+    case "transaction":
+      sortByTrans(categoryArr);
+      break;
+    default:
+      sortByDefault(categoryArr);
+      break;
+  }
+}
+sortBy();
+
+//Sorting functions
+
+function sortByDefault(categoryArr) {
+  const sortedArr = categoryArr
+    .map((item) => {
+      return { category: item };
+    })
+    .sort((a, b) => a.category.localeCompare(b.category));
+  renderCatCard(sortedArr);
+}
+
+function sortByAscAmount(categoryArr) {
+  // const sortedArr = expenseArr.reduce((acc, current) => {
+  //   if (current.category == item.category) {
+  //     acc += Number(current.expense);
+  //     time = current.time;
+  //   }
+  //   return acc;
+  // }, 0);
+  // console.log(sortedArr);
+}
+
+function sortByDscAmount() {
+  console.log("working");
+}
+
+function sortByNewDate() {
+  console.log("working");
+}
+
+function sortByOldDate() {
+  console.log("working");
+}
+
+function sortByTrans() {
+  const reducedArr = expenseArr.reduce((acc, current) => {
+    const isExisted = acc.find((item) => item.category === current.category);
+    if (isExisted) {
+      isExisted.repeat += 1;
+      return acc;
+    }
+    acc.push({ category: current.category, repeat: 1 });
+    return acc;
+  }, []);
+
+  const sortedArr = reducedArr.sort((a, b) => b.repeat - a.repeat);
+  renderCatCard(sortedArr);
 }
 
 //Create Category card
@@ -385,26 +461,21 @@ function renderOptCategory(appendto, category) {
 
 //dynamic category Card rendered
 
-function renderCatCard() {
+function renderCatCard(sortedArr) {
   disWrapper.innerHTML = "";
-  const categories = [
-    ...new Set(expenseArr.map((item) => item.category)),
-  ].sort();
-  categories.forEach((item) => {
+  sortedArr.forEach((item) => {
     let time;
     const finalAmt = expenseArr.reduce((acc, current) => {
-      if (current.category == item) {
+      if (current.category == item.category) {
         acc += Number(current.expense);
         time = current.time;
       }
       return acc;
     }, 0);
-    const card = createCategoryCard(item, finalAmt, time);
+    const card = createCategoryCard(item.category, finalAmt, time);
     disWrapper.appendChild(card);
   });
 }
-
-renderCatCard();
 
 //event on list in individual expense
 
@@ -650,6 +721,7 @@ function attachEventOnTable(table) {
 }
 
 //Edit function in view all table
+
 let editId = null;
 function editExpRow(editBtn) {
   const row = editBtn.closest("tr");
