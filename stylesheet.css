@@ -413,9 +413,35 @@ canvas {
   background-color: var(--input-bg-color);
 }
 
+.search-div {
+  display: flex;
+  align-items: center;
+}
+
 .search {
   width: 32rem;
   caret-color: var(--caret-color);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: none;
+}
+
+.searchbtn {
+  cursor: pointer;
+  background-color: transparent;
+  border-radius: 5px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border: none;
+  background-color: #5b5fef;
+  height: 3rem;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  border-left: none;
+}
+
+.searchbtn img {
+  height: 3rem;
 }
 
 .expheads {
@@ -630,7 +656,8 @@ canvas {
 .view-btn:active,
 .viewall-btn:active,
 .viewall-action-btn:active,
-.footer-btn:active {
+.footer-btn:active,
+.searchbtn:active {
   scale: 95%;
 }
 

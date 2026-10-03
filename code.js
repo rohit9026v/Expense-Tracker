@@ -314,21 +314,29 @@ search.addEventListener("input", (e) => {
   }
 
   timerId = setTimeout(() => {
-    const isExited = expenseArr.filter(
-      (item) => item.title.toLowerCase() === value,
+    const filteredArr = expenseArr.filter((item) =>
+      item.title.toLowerCase().includes(value),
     );
-    if (isExited[0]) {
+    if (filteredArr[0]) {
       datalist.innerHTML = "";
-      isExited.forEach((item) => createOption(item));
-      attachEvtToSearchOptions()
-    }   
+      filteredArr.forEach((item) => createOption(item));
+      eventOnSearch(filteredArr);
+    }
   }, 300);
 });
 
-//Event on search options
+//Event on search button
 
-function attachEvtToSearchOptions(){
-
+function eventOnSearch(filteredArr) {
+  console.log(filteredArr);
+  const searchBtn = document.querySelector("#search-btn");
+  searchBtn.addEventListener("click", (e) => {
+    const card = createViewAllCard(filteredArr);
+    const currentCard = e.target.closest(".transaction-controls");
+    if (card) {
+      currentCard.after(card);
+    }
+  });
 }
 
 //functions for Sort by
@@ -506,7 +514,7 @@ function renderCatCard(sortedArr) {
     const card = createCategoryCard(
       item.category,
       item.totalExpense,
-      item.time,
+      item.lastModified,
     );
 
     disWrapper.appendChild(card);
@@ -731,7 +739,10 @@ function attachEventOnViewAllCard(wrapper) {
     if (printBtn) {
       window.print();
     } else if (closeBtn) {
-      viewBtn.style.visibility = "visible";
+      if (viewBtn) {
+        viewBtn.style.visibility = "visible";
+      }
+
       wrapper.remove();
     }
   });
@@ -824,6 +835,11 @@ disWrapper.addEventListener("click", (e) => {
 //Create edit card
 
 function createEditCard(title, amount) {
+  const isExisted = document.querySelector(".edit-wrapper");
+  if (isExisted) {
+    alert("Kindly save an existing edit!");
+    return;
+  }
   const editWrapper = document.createElement("div"); //parent
   editWrapper.className = "edit-wrapper";
 
