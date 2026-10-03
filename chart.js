@@ -7,11 +7,11 @@ const drawChart = (canvas, type, data) => {
   return new Chart(canvas, {
     type: type,
     data: {
-      labels: data.map((item) => item.title),
+      labels: data.map((item) => item.category),
       datasets: [
         {
-          label: data.map((item) => item.title),
-          data: data.map((item) => item.expense),
+          label: data.map((item) => item.category),
+          data: data.map((item) => item.totalExpense),
           borderWidth: 2,
         },
       ],

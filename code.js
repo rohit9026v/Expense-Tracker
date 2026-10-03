@@ -31,6 +31,29 @@ function setLocal(name, arr) {
   return localStorage.setItem(name, JSON.stringify(arr));
 }
 
+//function to find category total from expenseArr
+
+function findTotal() {
+  const categoryTotal = expenseArr.reduce((acc, current) => {
+    const isExisted = acc.find((item) => item.category === current.category);
+    if (isExisted) {
+      isExisted.totalExpense += current.expense;
+      isExisted.repeat += 1;
+      isExisted.lastModified = current.time;
+      return acc;
+    }
+
+    acc.push({
+      category: current.category,
+      totalExpense: current.expense,
+      lastModified: current.time,
+      repeat: 1,
+    });
+    return acc;
+  }, []);
+  return categoryTotal;
+}
+
 //Fn for updating UI
 
 function updateUI() {
@@ -165,7 +188,7 @@ function monthTExp() {
 }
 monthTExp();
 
-//chart type&category selection
+//chart type & category selection
 
 const chartWrapper = document.querySelector(".chartwrapper");
 chartWrapper.addEventListener("change", (e) => {
@@ -185,19 +208,7 @@ chartWrapper.addEventListener("change", (e) => {
 
 const totalCanvas = document.querySelector("#total-canvas");
 function renderTotChart(type) {
-  const expArr = expenseArr.reduce((acc, current) => {
-    const isExisted = acc.find((item) => item.title === current.category);
-    if (isExisted) {
-      isExisted.expense += current.expense;
-    } else {
-      const obj = {
-        title: current.category,
-        expense: current.expense,
-      };
-      acc.push(obj);
-    }
-    return acc;
-  }, []);
+  const expArr = findTotal();
   drawChart(totalCanvas, type, expArr);
 }
 
@@ -213,7 +224,14 @@ renderCategories(categoryChart);
 const categoryCanvas = document.querySelector("#category-canvas");
 function renderCatChart(category) {
   const expArr = expenseArr.filter((item) => item.category === category);
-  drawChart(categoryCanvas, "doughnut", expArr);
+  //Temp fix
+  const tempArr = expArr.map((item) => {
+    return {
+      category: item.title,
+      totalExpense: item.expense,
+    };
+  });
+  drawChart(categoryCanvas, "doughnut", tempArr);
 }
 
 renderCatChart("clothing");
@@ -277,7 +295,41 @@ function changedFilter() {
 
 //Event for search
 const search = document.querySelector("#searchExp");
-search.addEventListener("change", (e) => {});
+let timerId;
+search.addEventListener("input", (e) => {
+  const value = e.target.value.toLowerCase();
+  const datalist = document.querySelector("#search-options");
+
+  clearTimeout(timerId);
+
+  if (!value) {
+    return;
+  }
+
+  function createOption(item) {
+    const option = document.createElement("option");
+    option.value = item.title;
+    option.innerText = item.title;
+    datalist.appendChild(option);
+  }
+
+  timerId = setTimeout(() => {
+    const isExited = expenseArr.filter(
+      (item) => item.title.toLowerCase() === value,
+    );
+    if (isExited[0]) {
+      datalist.innerHTML = "";
+      isExited.forEach((item) => createOption(item));
+      attachEvtToSearchOptions()
+    }   
+  }, 300);
+});
+
+//Event on search options
+
+function attachEvtToSearchOptions(){
+
+}
 
 //functions for Sort by
 
@@ -309,28 +361,6 @@ function sortBy(sortSelect) {
   }
 }
 sortBy();
-
-//function to find category total from expenseArr
-function findTotal() {
-  const categoryTotal = expenseArr.reduce((acc, current) => {
-    const isExisted = acc.find((item) => item.category === current.category);
-    if (isExisted) {
-      isExisted.totalExpense += current.expense;
-      isExisted.repeat += 1;
-      isExisted.lastModified = current.time;
-      return acc;
-    }
-
-    acc.push({
-      category: current.category,
-      totalExpense: current.expense,
-      lastModified: current.time,
-      repeat: 1,
-    });
-    return acc;
-  }, []);
-  return categoryTotal;
-}
 
 //Sorting functions
 
