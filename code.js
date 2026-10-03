@@ -282,39 +282,53 @@ search.addEventListener("change", (e) => {});
 //function for Sort by
 
 function sortBy(sortSelect) {
-  const categoryArr = [...new Set(expenseArr.map((item) => item.category))];
-
   if (!sortSelect) {
-    sortByDefault(categoryArr);
+    sortByDefault();
     return;
   }
 
   switch (sortSelect.selectedOptions[0].value) {
     case "asc-amount":
-      sortByAscAmount(categoryArr);
+      sortByAscAmount();
       break;
     case "dsc-amount":
-      sortByDscAmount(categoryArr);
+      sortByDscAmount();
       break;
     case "newest-date":
-      sortByNewDate(categoryArr);
+      sortByNewDate();
       break;
     case "oldest-date":
-      sortByOldDate(categoryArr);
+      sortByOldDate();
       break;
     case "transaction":
-      sortByTrans(categoryArr);
+      sortByTrans();
       break;
     default:
-      sortByDefault(categoryArr);
+      sortByDefault();
       break;
   }
 }
 sortBy();
 
+//function to find category total from expenseArr
+function findTotal() {
+  const categoryTotal = expenseArr.reduce((acc, current) => {
+    const isExisted = acc.find((item) => item.category === current.category);
+    if (isExisted) {
+      isExisted.amount += current.expense;
+      return acc;
+    }
+
+    acc.push({ category: current.category, amount: current.expense });
+    return acc;
+  }, []);
+  return categoryTotal;
+}
+
 //Sorting functions
 
-function sortByDefault(categoryArr) {
+function sortByDefault() {
+  const categoryArr = [...new Set(expenseArr.map((item) => item.category))];
   const sortedArr = categoryArr
     .map((item) => {
       return { category: item };
@@ -323,19 +337,15 @@ function sortByDefault(categoryArr) {
   renderCatCard(sortedArr);
 }
 
-function sortByAscAmount(categoryArr) {
-  // const sortedArr = expenseArr.reduce((acc, current) => {
-  //   if (current.category == item.category) {
-  //     acc += Number(current.expense);
-  //     time = current.time;
-  //   }
-  //   return acc;
-  // }, 0);
-  // console.log(sortedArr);
+function sortByAscAmount() {
+  const sortedArr = findTotal().sort((a, b) => a.amount - b.amount);
+
+  renderCatCard(sortedArr);
 }
 
 function sortByDscAmount() {
-  console.log("working");
+  const sortedArr = findTotal().sort((a, b) => b.amount - a.amount);
+  renderCatCard(sortedArr);
 }
 
 function sortByNewDate() {
