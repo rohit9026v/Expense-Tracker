@@ -255,7 +255,7 @@ controlSec.addEventListener("change", (e) => {
 
   if (filter) {
     changedFilter();
-  } else if (sortBy) {
+  } else if (sortSelect) {
     sortBy(sortSelect);
   }
 });
@@ -279,7 +279,7 @@ function changedFilter() {
 const search = document.querySelector("#searchExp");
 search.addEventListener("change", (e) => {});
 
-//function for Sort by
+//functions for Sort by
 
 function sortBy(sortSelect) {
   if (!sortSelect) {
@@ -315,11 +315,18 @@ function findTotal() {
   const categoryTotal = expenseArr.reduce((acc, current) => {
     const isExisted = acc.find((item) => item.category === current.category);
     if (isExisted) {
-      isExisted.amount += current.expense;
+      isExisted.totalExpense += current.expense;
+      isExisted.repeat += 1;
+      isExisted.lastModified = current.time;
       return acc;
     }
 
-    acc.push({ category: current.category, amount: current.expense });
+    acc.push({
+      category: current.category,
+      totalExpense: current.expense,
+      lastModified: current.time,
+      repeat: 1,
+    });
     return acc;
   }, []);
   return categoryTotal;
@@ -328,46 +335,38 @@ function findTotal() {
 //Sorting functions
 
 function sortByDefault() {
-  const categoryArr = [...new Set(expenseArr.map((item) => item.category))];
-  const sortedArr = categoryArr
-    .map((item) => {
-      return { category: item };
-    })
-    .sort((a, b) => a.category.localeCompare(b.category));
+  const sortedArr = findTotal().sort((a, b) =>
+    a.category.localeCompare(b.category),
+  );
   renderCatCard(sortedArr);
 }
 
 function sortByAscAmount() {
-  const sortedArr = findTotal().sort((a, b) => a.amount - b.amount);
-
+  const sortedArr = findTotal().sort((a, b) => a.totalExpense - b.totalExpense);
   renderCatCard(sortedArr);
 }
 
 function sortByDscAmount() {
-  const sortedArr = findTotal().sort((a, b) => b.amount - a.amount);
+  const sortedArr = findTotal().sort((a, b) => b.totalExpense - a.totalExpense);
   renderCatCard(sortedArr);
 }
 
 function sortByNewDate() {
-  console.log("working");
+  const sortedArr = findTotal().sort(
+    (a, b) => new Date(b.lastModified) - new Date(a.lastModified),
+  );
+  renderCatCard(sortedArr);
 }
 
 function sortByOldDate() {
-  console.log("working");
+  const sortedArr = findTotal().sort(
+    (a, b) => new Date(a.lastModified) - new Date(b.lastModified),
+  );
+  renderCatCard(sortedArr);
 }
 
 function sortByTrans() {
-  const reducedArr = expenseArr.reduce((acc, current) => {
-    const isExisted = acc.find((item) => item.category === current.category);
-    if (isExisted) {
-      isExisted.repeat += 1;
-      return acc;
-    }
-    acc.push({ category: current.category, repeat: 1 });
-    return acc;
-  }, []);
-
-  const sortedArr = reducedArr.sort((a, b) => b.repeat - a.repeat);
+  const sortedArr = findTotal().sort((a, b) => b.repeat - a.repeat);
   renderCatCard(sortedArr);
 }
 
@@ -474,15 +473,12 @@ function renderOptCategory(appendto, category) {
 function renderCatCard(sortedArr) {
   disWrapper.innerHTML = "";
   sortedArr.forEach((item) => {
-    let time;
-    const finalAmt = expenseArr.reduce((acc, current) => {
-      if (current.category == item.category) {
-        acc += Number(current.expense);
-        time = current.time;
-      }
-      return acc;
-    }, 0);
-    const card = createCategoryCard(item.category, finalAmt, time);
+    const card = createCategoryCard(
+      item.category,
+      item.totalExpense,
+      item.time,
+    );
+
     disWrapper.appendChild(card);
   });
 }
